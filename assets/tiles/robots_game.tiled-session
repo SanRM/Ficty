@@ -1,0 +1,143 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "chapter-1/level-1.tmx",
+    "expandedProjectPaths": [
+        "chapter2",
+        "chapter1",
+        "."
+    ],
+    "file.lastUsedOpenFilter": "Todos los archivos (*)",
+    "fileStates": {
+        "chapter-1/level-1.tmx": {
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 1,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 405,
+                "y": 135
+            }
+        },
+        "chapter-1/level-2.tmx": {
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 0.75,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 320,
+                "y": 200.66666666666669
+            }
+        },
+        "chapter-2/level-2.tmx": {
+            "scale": 1.8287499999999999,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 320.4374572795626,
+                "y": 200.13670539986333
+            }
+        },
+        "chapter1/Level-01.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 326,
+                "y": 153
+            }
+        },
+        "chapter1/Level-1.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 247,
+                "y": 147
+            }
+        },
+        "chapter1/level-1.tmx": {
+            "scale": 1.6255555555555554,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 359.2617908407382,
+                "y": 183.32194121667806
+            }
+        },
+        "chapter1/patrons.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "chapter2/Level-02.tmx": {
+            "scale": 1.8287499999999999,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 319.8906356801094,
+                "y": 183.73205741626796
+            }
+        },
+        "chapter2/level-2.tmx": {
+            "scale": 1.8287499999999999,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 320.4374572795626,
+                "y": 200.13670539986333
+            }
+        },
+        "level-1.tmx": {
+            "scale": 1.8287499999999999,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 319.8906356801094,
+                "y": 200.13670539986333
+            }
+        },
+        "patrones.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "patrones_game.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "patrons.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "robots_game.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.imagePath": "D:/SANTIAGO/Proyectos Santiago/flutter_flame_game/assets/images/Terrain",
+    "map.height": 23,
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 48,
+    "openFiles": [
+        "chapter-1/level-1.tmx",
+        "chapter-1/level-2.tmx"
+    ],
+    "project": "robots_game.tiled-project",
+    "recentFiles": [
+        "chapter-1/level-2.tmx",
+        "chapter-1/level-1.tmx",
+        "patrones_game.tsx",
+        "chapter-2/level-2.tmx",
+        "chapter2/level-2.tmx",
+        "level-1.tmx",
+        "patrons.tsx",
+        "chapter1/level-1.tmx",
+        "chapter1/Level-1.tmx",
+        "chapter1/patrons.tsx",
+        "robots_game.tsx",
+        "patrones.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}

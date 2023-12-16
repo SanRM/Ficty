@@ -1,0 +1,42 @@
+name: flutter_flame_game
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.2.0-97.0.dev <4.0.0'
+
+dependencies:
+  animated_splash_screen: ^1.3.0
+  carousel_slider: ^4.2.1
+  flame: ^1.11.0
+  flame_forge2d: ^0.16.0+2
+  flame_tiled: ^1.18.1
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_lints: ^2.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/tiles/
+    - assets/tiles/chapter-1/
+    - assets/tiles/chapter-2/
+    - assets/tiles/chapter-3/
+    - assets/tiles/chapter-4/
+    - assets/tiles/chapter-5/
+
+    - assets/images/Terrain/
+
+    - assets/images/
+    - assets/audio/
+    - assets/images/Main Characters/Mask Dude/
+    - assets/images/Main Characters/Ninja Frog/
+    - assets/images/Main Characters/Pink Man/
+    - assets/images/Main Characters/Virtual Guy/
+    - assets/images/Background/
