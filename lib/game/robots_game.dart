@@ -2,7 +2,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flutter_flame_game/game/levels.dart/level_01.dart';
+import 'package:flutter_flame_game/game/levels.dart/level.dart';
 import 'package:flutter_flame_game/game/player/player.dart';
 
 class RobotsGame extends FlameGame with

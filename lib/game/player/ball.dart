@@ -6,29 +6,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_flame_game/game/collissions/collision_block.dart';
 import 'package:flutter_flame_game/game/robots_game.dart';
 
-class Ball extends CircleComponent with HasGameRef<RobotsGame>, CollisionCallbacks {
+class Ball extends CircleComponent
+    with HasGameRef<RobotsGame>, CollisionCallbacks {
   double playerX;
   double playerY;
 
   Ball({required this.playerX, required this.playerY}) {
     paint = Paint()..color = Colors.white;
     radius = 5;
+    debugMode = true;
   }
 
-  // 1.
   late Vector2 velocity;
-  // 2.
   double speed = 7;
-  // 3.
-  //static const degree = math.pi / 180;
 
   // 6.
   @override
   onLoad() {
     resetBall;
-    final hitBox = RectangleHitbox(isSolid: true
-        //radius: radius,
-        );
+    final hitBox = RectangleHitbox(
+        isSolid: true, collisionType: CollisionType.active, priority: 1);
 
     addAll([
       hitBox,
@@ -53,10 +50,8 @@ class Ball extends CircleComponent with HasGameRef<RobotsGame>, CollisionCallbac
     );
   }
 
-
   @override
-  void onCollision(
-      Set<Vector2> intersectionPoints, PositionComponent other) {
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     if (other is CollisionBlock) {
       // Determine the side of the collision
       Vector2 collisionPoint = intersectionPoints.first;
@@ -71,22 +66,19 @@ class Ball extends CircleComponent with HasGameRef<RobotsGame>, CollisionCallbac
       } else if (isLeft || isRight) {
         velocity.x *= -1;
       }
+
+      // Reposition the ball outside of the block
+      if (isTop) {
+        position.y = other.position.y - size.y;
+      } else if (isBottom) {
+        position.y = other.position.y + other.size.y;
+      } else if (isLeft) {
+        position.x = other.position.x - size.x;
+      } else if (isRight) {
+        position.x = other.position.x + other.size.x;
+      }
     }
 
     super.onCollision(intersectionPoints, other);
   }
-
-  // @override
-  // void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
-  //   if (other is CollisionBlock) {
-  //     Vector2 normal = (position - other.position).normalized();
-  //     velocity.reflect(normal);
-  //     //position += normal * (radius + 5 - intersectionPoints.length);
-
-  //     velocity *= -1; // Invierte la dirección de la velocidad
-
-  //   }
-
-  //   super.onCollisionStart(intersectionPoints, other);
-  // }
 }

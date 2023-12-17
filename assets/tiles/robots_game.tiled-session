@@ -3,34 +3,36 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "chapter-1/level-1.tmx",
+    "activeFile": "chapter-1/level-2.tmx",
     "expandedProjectPaths": [
-        "chapter2",
         "chapter1",
-        "."
+        ".",
+        "chapter2"
     ],
     "file.lastUsedOpenFilter": "Todos los archivos (*)",
     "fileStates": {
         "chapter-1/level-1.tmx": {
             "expandedObjectLayers": [
+                3,
+                2
+            ],
+            "scale": 1.5,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 275.99999999999994,
+                "y": 145.33333333333334
+            }
+        },
+        "chapter-1/level-2.tmx": {
+            "expandedObjectLayers": [
+                3,
                 2
             ],
             "scale": 1,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 405,
-                "y": 135
-            }
-        },
-        "chapter-1/level-2.tmx": {
-            "expandedObjectLayers": [
-                2
-            ],
-            "scale": 0.75,
-            "selectedLayer": 1,
-            "viewCenter": {
-                "x": 320,
-                "y": 200.66666666666669
+                "x": 421,
+                "y": 189
             }
         },
         "chapter-2/level-2.tmx": {
@@ -122,8 +124,8 @@
     ],
     "project": "robots_game.tiled-project",
     "recentFiles": [
-        "chapter-1/level-2.tmx",
         "chapter-1/level-1.tmx",
+        "chapter-1/level-2.tmx",
         "patrones_game.tsx",
         "chapter-2/level-2.tmx",
         "chapter2/level-2.tmx",

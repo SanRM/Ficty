@@ -20,7 +20,10 @@ class CollisionBlock extends PositionComponent {
 
   @override
   FutureOr<void> onLoad() {
-    add(RectangleHitbox());
+    add(RectangleHitbox(
+      collisionType: CollisionType.active,
+      
+    ));
     return super.onLoad();
   }
 
