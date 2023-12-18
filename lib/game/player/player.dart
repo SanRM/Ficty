@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/services/raw_keyboard.dart';
+import 'package:flutter_flame_game/game/player/ball.dart';
 import 'package:flutter_flame_game/game/robots_game.dart';
 
 enum PlayerState {
@@ -11,9 +13,11 @@ enum PlayerState {
   jumping,
   falling,
   hit,
+  appearing,
 }
 
-class Player extends SpriteAnimationComponent with HasGameRef<RobotsGame>, KeyboardHandler {
+class Player extends SpriteAnimationComponent
+    with HasGameRef<RobotsGame>, KeyboardHandler, CollisionCallbacks {
   Player({
     this.character = 'Ninja Frog',
   }) : super() {
@@ -33,10 +37,16 @@ class Player extends SpriteAnimationComponent with HasGameRef<RobotsGame>, Keybo
   late final Map animationsList;
 
   bool isRightFacing = false;
+  final double stepTime = 0.05;
 
   @override
   FutureOr<void> onLoad() async {
+
     _loadAnimations();
+    _respawn();
+
+    print('El juego ha cargado correctamente');
+
 
     return super.onLoad();
   }
@@ -47,6 +57,7 @@ class Player extends SpriteAnimationComponent with HasGameRef<RobotsGame>, Keybo
     jumpingAnimation = _spriteAnimation('Jump', 1);
     fallingAnimation = _spriteAnimation('Fall', 1);
     hitAnimation = _spriteAnimation('Hit', 7)..loop = false;
+    appearingAnimation = _specialSpriteAnimation('Appearing', 7);
 
     animationsList = {
       PlayerState.idle: idleAnimation,
@@ -54,6 +65,7 @@ class Player extends SpriteAnimationComponent with HasGameRef<RobotsGame>, Keybo
       PlayerState.jumping: jumpingAnimation,
       PlayerState.falling: fallingAnimation,
       PlayerState.hit: hitAnimation,
+      PlayerState.appearing: appearingAnimation,
     };
 
     animation = animationsList[PlayerState.idle];
@@ -69,25 +81,20 @@ class Player extends SpriteAnimationComponent with HasGameRef<RobotsGame>, Keybo
             keysPressed.contains(LogicalKeyboardKey.keyD);
 
     if (isLeftKeyPressed) {
-
       animation = animationsList[PlayerState.running];
       if (!isRightFacing) {
         flipHorizontallyAroundCenter();
         isRightFacing = true;
       }
-
     } else if (isRightKeyPressed) {
-
       animation = animationsList[PlayerState.running];
       if (isRightFacing) {
         flipHorizontallyAroundCenter();
         isRightFacing = false;
       }
-
     } else {
       animation = animationsList[PlayerState.idle];
     }
-
 
     return super.onKeyEvent(event, keysPressed);
   }
@@ -97,9 +104,45 @@ class Player extends SpriteAnimationComponent with HasGameRef<RobotsGame>, Keybo
       game.images.fromCache('Main Characters/$character/$state (32x32).png'),
       SpriteAnimationData.sequenced(
         amount: amount,
-        stepTime: 0.05,
+        stepTime: stepTime,
         textureSize: Vector2.all(32),
       ),
     );
+  }
+
+  SpriteAnimation _specialSpriteAnimation(String state, int amount) {
+    return SpriteAnimation.fromFrameData(
+      game.images.fromCache('Main Characters/$state (96x96).png'),
+      SpriteAnimationData.sequenced(
+        amount: amount,
+        stepTime: stepTime,
+        textureSize: Vector2.all(96),
+      ),
+    );
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    if (other is Ball) {
+      print('Ball collided with player');
+      animation = animationsList[PlayerState.idle];
+      Future.delayed(Duration(milliseconds: 350), () {
+        animation = animationsList[PlayerState.jumping];
+        Future.delayed(Duration(milliseconds: 350), () {
+          animation = animationsList[PlayerState.idle];
+        });
+      });
+    }
+
+    super.onCollision(intersectionPoints, other);
+  }
+
+  void _respawn() {
+
+    add(
+      RectangleHitbox(collisionType: CollisionType.active),
+    );
+
+    animation = animationsList[PlayerState.idle];
   }
 }
