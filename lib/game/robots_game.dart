@@ -19,7 +19,9 @@ class RobotsGame extends FlameGame with
     this.levelName = 'level-01',
     required this.responsiveWidth,
     required this.responsiveHeight,
-  });
+  }){
+    //debugMode = true;
+  }
 
   Player player = Player(
     character: 'Ninja Frog',

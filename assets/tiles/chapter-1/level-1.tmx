@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="48" height="22" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="72">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="48" height="22" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="75">
  <tileset firstgid="1" source="../patrones_game.tsx"/>
  <layer id="1" name="Capa de patrones 1" width="48" height="22">
   <data encoding="csv">
@@ -29,6 +29,8 @@
  </layer>
  <objectgroup id="2" name="spawn">
   <object id="2" name="player" type="player" x="512" y="160" width="32" height="32"/>
+  <object id="72" name="enemy" type="robot" x="368" y="288" width="32" height="32"/>
+  <object id="74" name="enemy" type="robot" x="208" y="160" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="3" name="collisions">
   <object id="12" type="block" x="144" y="64" width="96" height="16"/>

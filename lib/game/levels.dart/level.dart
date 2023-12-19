@@ -6,12 +6,13 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_flame_game/game/enemies/robot.dart';
 import 'package:flutter_flame_game/game/utils/collision_block.dart';
 import 'package:flutter_flame_game/game/player/ball.dart';
 //import 'package:flame/sprite.dart';
 import 'package:flutter_flame_game/game/player/player.dart';
 import 'package:flutter_flame_game/game/robots_game.dart';
-import 'package:flutter_flame_game/game/utils/effects.dart';
+import 'package:flutter_flame_game/game/utils/player_effects.dart';
 
 class Level extends World
     with HasGameRef<RobotsGame>, CollisionCallbacks, DragCallbacks {
@@ -86,6 +87,7 @@ class Level extends World
 
   @override
   void onDragEnd(DragEndEvent event) {
+    
     esfera.velocity = Vector2(
       _currentPosition.dx - player.center[0],
       _currentPosition.dy - player.center[1],
@@ -144,20 +146,18 @@ class Level extends World
       for (final spawnPoint in spawnPointsLayer.objects) {
         switch (spawnPoint.class_) {
           case 'player':
-            esfera =
-                Ball(playerX: spawnPoint.x + 10, playerY: spawnPoint.y + 10);
+            esfera = Ball(playerX: spawnPoint.x + 10, playerY: spawnPoint.y + 10);
             add(esfera);
 
-            Effects effects = Effects();
+            PlayerEffects effects = PlayerEffects();
 
-            effects.position =
-                Vector2(spawnPoint.x, spawnPoint.y) - Vector2.all(32);
+            effects.position = Vector2(spawnPoint.x, spawnPoint.y) - Vector2.all(32);
 
             add(effects);
 
-            effects.animation = effects.animationsList[EffectState.appearing];
+            effects.animation = effects.animationsList[PlayerEffectState.appearing];
             Future.delayed(Duration(milliseconds: 350), () {
-              effects.animation = effects.animationsList[EffectState.nullState];
+              effects.animation = effects.animationsList[PlayerEffectState.nullState];
               player.setOpacity(1);
             });
 
@@ -165,13 +165,28 @@ class Level extends World
             player.setOpacity(0);
             add(player);
 
-            //player.position = Vector2(spawnPoint.x, spawnPoint.y) - Vector2.all(32);
-
-            // Future.delayed(Duration(milliseconds: 350), () {
-            //   player.position = Vector2(spawnPoint.x, spawnPoint.y);
-            // });
-
             break;
+          
+          case 'robot':
+
+            PlayerEffects effects = PlayerEffects();
+            Robot robot = Robot();
+
+            effects.position = Vector2(spawnPoint.x, spawnPoint.y) - Vector2.all(32);
+
+            add(effects);
+
+            effects.animation = effects.animationsList[PlayerEffectState.appearing];
+            Future.delayed(Duration(milliseconds: 350), () {
+              effects.animation = effects.animationsList[PlayerEffectState.nullState];
+              robot.setOpacity(1);
+            });
+
+            robot.position = Vector2(spawnPoint.x, spawnPoint.y);
+            robot.setOpacity(0);
+            add(robot);
+
+          break;
         }
       }
     }

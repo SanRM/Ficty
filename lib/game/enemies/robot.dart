@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/services/raw_keyboard.dart';
 import 'package:flutter_flame_game/game/player/ball.dart';
 import 'package:flutter_flame_game/game/robots_game.dart';
+import 'package:flutter_flame_game/game/utils/player_effects.dart';
 
 enum PlayerState {
   idle,
@@ -16,13 +17,13 @@ enum PlayerState {
   appearing,
 }
 
-class Player extends SpriteAnimationComponent
+class Robot extends SpriteAnimationComponent
     with HasGameRef<RobotsGame>, KeyboardHandler, CollisionCallbacks {
-  Player({
-    this.character = 'Ninja Frog',
+  Robot({
+    this.character = 'Mask Dude',
   }) : super() {
     //debugMode = true;
-    debugColor = Color.fromARGB(255, 0, 255, 136);
+    debugColor = Colors.red;
   }
 
   final String character;
@@ -38,6 +39,8 @@ class Player extends SpriteAnimationComponent
 
   bool isRightFacing = false;
   final double stepTime = 0.05;
+  int lifePoints = 2;
+  List<Ball> collidedBalls = [];
 
   @override
   FutureOr<void> onLoad() async {
@@ -45,6 +48,19 @@ class Player extends SpriteAnimationComponent
     _respawn();
 
     return super.onLoad();
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+
+    collidedBalls.removeWhere((ball) => !this.toRect().overlaps(ball.toRect()));
+
+    if (lifePoints == 0) {
+      print('Robot died');
+      _die();
+    }
+    
   }
 
   _loadAnimations() {
@@ -117,11 +133,14 @@ class Player extends SpriteAnimationComponent
     );
   }
 
-  @override
+ @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if (other is Ball) {
-      //print('Ball collided with player');
-      animation = animationsList[PlayerState.jumping];
+    if (other is Ball && !collidedBalls.contains(other)) {
+      collidedBalls.add(other);
+      lifePoints--;
+      print(lifePoints);
+      animation = animationsList[PlayerState.hit];
+
       Future.delayed(Duration(milliseconds: 350), () {
         animation = animationsList[PlayerState.idle];
       });
@@ -130,11 +149,31 @@ class Player extends SpriteAnimationComponent
     super.onCollision(intersectionPoints, other);
   }
 
+
+
   void _respawn() {
     add(
       RectangleHitbox(collisionType: CollisionType.active),
     );
 
     animation = animationsList[PlayerState.idle];
+  }
+
+  void _die() {
+
+    lifePoints = 2;
+
+    PlayerEffects effects = PlayerEffects();
+
+    add(effects);
+
+    effects.position = Vector2.all(0) - Vector2.all(32);
+
+    effects.animation = effects.animationsList[PlayerEffectState.desappearing];
+
+    Future.delayed(Duration(milliseconds: 350), () {
+      effects.animation = effects.animationsList[PlayerEffectState.nullState];
+      this.setOpacity(0);
+    });
   }
 }

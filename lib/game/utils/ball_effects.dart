@@ -1,32 +1,37 @@
 import 'package:flame/components.dart';
 import 'package:flutter_flame_game/game/robots_game.dart';
 
-enum EffectState {
+enum BallEffectState {
   nullState,
-  appearing,
+  collision,
 }
 
-class Effects extends SpriteAnimationComponent with HasGameRef<RobotsGame> {
-  late final SpriteAnimation appearingAnimation;
+class BallEffects extends SpriteAnimationComponent with HasGameRef<RobotsGame> {
+
+
+  BallEffects();
+
+  late final SpriteAnimation collisionAnimation;
   late final Map animationsList;
   final double stepTime = 0.05;
 
   @override
   onLoad() async {
+    
     _loadAnimations();
 
     return super.onLoad();
   }
 
   _loadAnimations() {
-    appearingAnimation = _specialSpriteAnimation('Appearing', 7);
+    collisionAnimation = _specialSpriteAnimation('Appearing', 7);
 
     animationsList = {
-      EffectState.appearing: appearingAnimation,
-      EffectState.nullState: null,
+      BallEffectState.collision: collisionAnimation,
+      BallEffectState.nullState: null,
     };
 
-    animation = animationsList[EffectState.nullState];
+    animation = animationsList[BallEffectState.nullState];
   }
 
   SpriteAnimation _specialSpriteAnimation(String state, int amount) {
@@ -35,8 +40,10 @@ class Effects extends SpriteAnimationComponent with HasGameRef<RobotsGame> {
       SpriteAnimationData.sequenced(
         amount: amount,
         stepTime: stepTime,
-        textureSize: Vector2.all(96),
+        textureSize: Vector2.all(32),
       ),
     );
   }
+  
+
 }
