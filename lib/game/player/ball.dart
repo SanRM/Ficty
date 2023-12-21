@@ -22,7 +22,7 @@ class Ball extends CircleComponent
   }
 
   Vector2 velocity = Vector2.zero();
-  double speed = 8.5;
+  double speed = 9;
   BallEffects ballEffects = BallEffects();
   int collisionCount = 0;
   Random random = new Random();

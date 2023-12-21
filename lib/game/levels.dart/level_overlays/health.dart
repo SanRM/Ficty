@@ -65,7 +65,6 @@ class HealthIndicator extends StatelessWidget {
                     porcentaje = gameRef.healthImage.value / enemiesCount;
                     //porcentaje = enemiesKilled / enemiesCount;
                     porcentaje = porcentaje > 1 ? 1 : porcentaje;
-                    
                   }
 
                   print('porcentaje: $porcentaje');
@@ -74,31 +73,38 @@ class HealthIndicator extends StatelessWidget {
                     gameRef.healthImage.value = 0;
                   }
 
-                  return Stack(
-                    children: [
-                      LinearProgressIndicator(
-                        value: porcentaje,
-                        color: Color.fromARGB(255, 0, 255, 157),
+                  return Align(
+                    alignment: Alignment.topRight,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width / 8,
+                      child: Column(
+                        children: [
+                          LinearProgressIndicator(
+                            value: porcentaje,
+                            color: Color.fromARGB(255, 255, 0, 85),
+                          ),
+                          Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.width / 60)),
+                          Text(
+                            'ENEMIGOS $enemiesKilled/$enemiesCount',
+                            style: TextStyle(
+                              fontSize: MediaQuery.of(context).size.width / 60,
+                              color: Colors.white,
+                              decoration: TextDecoration.none,
+                            ),
+                          ),
+                        ],
                       ),
-                      // Align(
-                      //   alignment: Alignment.topRight,
-                      //   child: Container(On
-                      //       child: Image.asset(
-                      //     'assets/images/HUD/Health/${gameRef.healthImage.value}.png',
-                      //     fit: BoxFit.contain,
-                      //     height: 40,
-                      //   )),
-                      // ),
-                      Text(
-                        'ENEMIGOS $enemiesKilled / $enemiesCount',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                          decoration: TextDecoration.none,
-                        ),
-                      )
-                    ],
+                    ),
                   );
+                  // Align(
+                  //   alignment: Alignment.topRight,
+                  //   child: Container(On
+                  //       child: Image.asset(
+                  //     'assets/images/HUD/Health/${gameRef.healthImage.value}.png',
+                  //     fit: BoxFit.contain,
+                  //     height: 40,
+                  //   )),
+                  // ),
                 },
               );
             },
