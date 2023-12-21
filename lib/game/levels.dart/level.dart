@@ -7,6 +7,7 @@ import 'package:flame/events.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flame_game/game/enemies/robot.dart';
+import 'package:flutter_flame_game/game/levels.dart/level_overlays/health.dart';
 import 'package:flutter_flame_game/game/utils/collision_block.dart';
 import 'package:flutter_flame_game/game/player/ball.dart';
 //import 'package:flame/sprite.dart';
@@ -95,6 +96,9 @@ class Level extends World
 
     esfera.paint.color = Colors.white;
 
+    
+    game.numberOfShots.value--;
+
     //print('velocity: ${esfera.velocity}');
 
     super.onDragEnd(event);
@@ -139,6 +143,13 @@ class Level extends World
   }
 
   void _spawningObjects() {
+
+    //HealthIndicator healthIndicator = HealthIndicator();
+
+    //add(healthIndicator);
+
+    //add(healthIndicator);
+
     final spawnPointsLayer =
         levelTiledComponent.tileMap.getLayer<ObjectGroup>('spawn');
 
@@ -185,6 +196,10 @@ class Level extends World
             robot.position = Vector2(spawnPoint.x, spawnPoint.y);
             robot.setOpacity(0);
             add(robot);
+
+            game.enemiesCount.value++;
+            game.numberOfShots.value++;
+            print(game.enemiesCount);
 
           break;
         }

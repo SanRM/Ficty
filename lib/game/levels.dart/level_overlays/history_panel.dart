@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_flame_game/game/levels.dart/level_overlays/health.dart';
 import 'package:flutter_flame_game/game/robots_game.dart';
 
 class HistoryPanel extends StatelessWidget {
@@ -45,6 +46,7 @@ class HistoryPanel extends StatelessWidget {
                     onPressed: () {
                       gameRef.overlays.remove(HistoryPanel.id);
                       gameRef.resumeEngine();
+                      //gameRef.overlays.add(HealthIndicator.id);
                     },
                     child: const Text('Continuar'),
                   ),

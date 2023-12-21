@@ -22,7 +22,7 @@ class Ball extends CircleComponent
   }
 
   Vector2 velocity = Vector2.zero();
-  double speed = 7;
+  double speed = 8.5;
   BallEffects ballEffects = BallEffects();
   int collisionCount = 0;
   Random random = new Random();
@@ -31,8 +31,7 @@ class Ball extends CircleComponent
   @override
   onLoad() {
     resetBall;
-    final hitBox =
-        CircleHitbox(isSolid: true, collisionType: CollisionType.active);
+    final hitBox = CircleHitbox(isSolid: true, collisionType: CollisionType.active);
 
     addAll([hitBox, ballEffects]);
 
@@ -45,7 +44,7 @@ class Ball extends CircleComponent
     position += velocity * dt * speed;
 
     //print(collisionCount);
-    if (collisionCount == 6) {
+    if (collisionCount > 5) {
       resetBall;
     }
   }

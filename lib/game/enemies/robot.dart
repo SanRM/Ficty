@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/services/raw_keyboard.dart';
 import 'package:flutter_flame_game/game/player/ball.dart';
 import 'package:flutter_flame_game/game/robots_game.dart';
 import 'package:flutter_flame_game/game/utils/player_effects.dart';
@@ -18,7 +17,7 @@ enum PlayerState {
 }
 
 class Robot extends SpriteAnimationComponent
-    with HasGameRef<RobotsGame>, KeyboardHandler, CollisionCallbacks {
+    with HasGameRef<RobotsGame>, CollisionCallbacks {
   Robot({
     this.character = 'Mask Dude',
   }) : super() {
@@ -41,11 +40,16 @@ class Robot extends SpriteAnimationComponent
   final double stepTime = 0.05;
   int lifePoints = 2;
   List<Ball> collidedBalls = [];
+  bool isActive = true;
+
+  TextComponent lifePointsText = TextComponent();
 
   @override
   FutureOr<void> onLoad() async {
+    lifePointsText = TextComponent(text: '$lifePoints', position: -Vector2(-15, 15), scale: Vector2.all(0.5));
+
     _loadAnimations();
-    _respawn();
+    _spawnRobot();
 
     return super.onLoad();
   }
@@ -54,13 +58,18 @@ class Robot extends SpriteAnimationComponent
   void update(double dt) {
     super.update(dt);
 
-    collidedBalls.removeWhere((ball) => !this.toRect().overlaps(ball.toRect()));
+    if (isActive) {
+      collidedBalls
+          .removeWhere((ball) => !this.toRect().overlaps(ball.toRect()));
 
-    if (lifePoints == 0) {
-      print('Robot died');
-      _die();
+      lifePointsText.text = '$lifePoints';
+      add(lifePointsText);
+
+      if (lifePoints == 0) {
+        print('Robot died');
+        _die();
+      }
     }
-    
   }
 
   _loadAnimations() {
@@ -81,34 +90,6 @@ class Robot extends SpriteAnimationComponent
     };
 
     animation = animationsList[PlayerState.idle];
-  }
-
-  @override
-  bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    final isLeftKeyPressed =
-        keysPressed.contains(LogicalKeyboardKey.arrowLeft) ||
-            keysPressed.contains(LogicalKeyboardKey.keyA);
-    final isRightKeyPressed =
-        keysPressed.contains(LogicalKeyboardKey.arrowRight) ||
-            keysPressed.contains(LogicalKeyboardKey.keyD);
-
-    if (isLeftKeyPressed) {
-      animation = animationsList[PlayerState.running];
-      if (!isRightFacing) {
-        flipHorizontallyAroundCenter();
-        isRightFacing = true;
-      }
-    } else if (isRightKeyPressed) {
-      animation = animationsList[PlayerState.running];
-      if (isRightFacing) {
-        flipHorizontallyAroundCenter();
-        isRightFacing = false;
-      }
-    } else {
-      animation = animationsList[PlayerState.idle];
-    }
-
-    return super.onKeyEvent(event, keysPressed);
   }
 
   SpriteAnimation _spriteAnimation(String state, int amount) {
@@ -133,7 +114,7 @@ class Robot extends SpriteAnimationComponent
     );
   }
 
- @override
+  @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     if (other is Ball && !collidedBalls.contains(other)) {
       collidedBalls.add(other);
@@ -149,9 +130,7 @@ class Robot extends SpriteAnimationComponent
     super.onCollision(intersectionPoints, other);
   }
 
-
-
-  void _respawn() {
+  void _spawnRobot() {
     add(
       RectangleHitbox(collisionType: CollisionType.active),
     );
@@ -160,7 +139,11 @@ class Robot extends SpriteAnimationComponent
   }
 
   void _die() {
+    isActive = false;
 
+    gameRef.healthImage.value = gameRef.healthImage.value - 2;
+
+    lifePointsText.text = '';
     lifePoints = 2;
 
     PlayerEffects effects = PlayerEffects();
@@ -175,5 +158,7 @@ class Robot extends SpriteAnimationComponent
       effects.animation = effects.animationsList[PlayerEffectState.nullState];
       this.setOpacity(0);
     });
+
+    game.enemiesKilled.value++;
   }
 }

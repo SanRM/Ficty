@@ -1,11 +1,12 @@
-
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_flame_game/game/levels.dart/level.dart';
 import 'package:flutter_flame_game/game/player/player.dart';
 
-class RobotsGame extends FlameGame with
+class RobotsGame extends FlameGame
+    with
         HasKeyboardHandlerComponents,
         HasCollisionDetection,
         DragCallbacks,
@@ -19,7 +20,7 @@ class RobotsGame extends FlameGame with
     this.levelName = 'level-01',
     required this.responsiveWidth,
     required this.responsiveHeight,
-  }){
+  }) {
     //debugMode = true;
   }
 
@@ -29,6 +30,11 @@ class RobotsGame extends FlameGame with
 
   final String chapter;
   late CameraComponent cam;
+
+  ValueNotifier enemiesCount = ValueNotifier<int>(0);
+  ValueNotifier enemiesKilled = ValueNotifier<int>(0);
+  ValueNotifier numberOfShots = ValueNotifier<int>(0);
+  ValueNotifier healthImage = ValueNotifier<int>(0);
 
   @override
   Future<void> onLoad() async {
@@ -61,5 +67,4 @@ class RobotsGame extends FlameGame with
       addAll([cam, world]);
     });
   }
-
 }

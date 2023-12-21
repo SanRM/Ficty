@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/services/raw_keyboard.dart';
 import 'package:flutter_flame_game/game/player/ball.dart';
 import 'package:flutter_flame_game/game/robots_game.dart';
 
@@ -17,7 +16,7 @@ enum PlayerState {
 }
 
 class Player extends SpriteAnimationComponent
-    with HasGameRef<RobotsGame>, KeyboardHandler, CollisionCallbacks {
+    with HasGameRef<RobotsGame>, CollisionCallbacks {
   Player({
     this.character = 'Ninja Frog',
   }) : super() {
@@ -67,33 +66,6 @@ class Player extends SpriteAnimationComponent
     animation = animationsList[PlayerState.idle];
   }
 
-  @override
-  bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    final isLeftKeyPressed =
-        keysPressed.contains(LogicalKeyboardKey.arrowLeft) ||
-            keysPressed.contains(LogicalKeyboardKey.keyA);
-    final isRightKeyPressed =
-        keysPressed.contains(LogicalKeyboardKey.arrowRight) ||
-            keysPressed.contains(LogicalKeyboardKey.keyD);
-
-    if (isLeftKeyPressed) {
-      animation = animationsList[PlayerState.running];
-      if (!isRightFacing) {
-        flipHorizontallyAroundCenter();
-        isRightFacing = true;
-      }
-    } else if (isRightKeyPressed) {
-      animation = animationsList[PlayerState.running];
-      if (isRightFacing) {
-        flipHorizontallyAroundCenter();
-        isRightFacing = false;
-      }
-    } else {
-      animation = animationsList[PlayerState.idle];
-    }
-
-    return super.onKeyEvent(event, keysPressed);
-  }
 
   SpriteAnimation _spriteAnimation(String state, int amount) {
     return SpriteAnimation.fromFrameData(

@@ -5,28 +5,28 @@
     },
     "activeFile": "chapter-1/level-1.tmx",
     "expandedProjectPaths": [
-        "chapter1",
+        ".",
         "chapter2",
-        "."
+        "chapter1"
     ],
     "file.lastUsedOpenFilter": "Todos los archivos (*)",
     "fileStates": {
         "chapter-1/level-1.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
-            "scale": 1,
+            "scale": 2,
             "selectedLayer": 1,
             "viewCenter": {
                 "x": 384,
-                "y": 175.5
+                "y": 175.75
             }
         },
         "chapter-1/level-2.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
             "scale": 1,
             "selectedLayer": 2,

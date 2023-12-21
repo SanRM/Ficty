@@ -1,6 +1,7 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_flame_game/game/levels.dart/level_overlays/health.dart';
 import 'package:flutter_flame_game/game/levels.dart/level_overlays/history_panel.dart';
 import 'package:flutter_flame_game/game/levels.dart/level_overlays/pause_button.dart';
 import 'package:flutter_flame_game/game/levels.dart/level_overlays/pause_manu.dart';
@@ -72,17 +73,13 @@ class LevelSelection extends StatelessWidget {
                         //1. TODO: Agregar overlay de panel de historial
                         //HistoryPanel.id,
                         PauseButton.id,
+                        HealthIndicator.id,
                       ],
                       overlayBuilderMap: {
-                        HistoryPanel.id:
-                            (BuildContext context, RobotsGame gameRef) =>
-                                HistoryPanel(gameRef: gameRef),
-                        PauseButton.id:
-                            (BuildContext context, RobotsGame gameRef) =>
-                                PauseButton(gameRef: gameRef),
-                        PauseMenu.id:
-                            (BuildContext context, RobotsGame gameRef) =>
-                                PauseMenu(gameRef: gameRef),
+                        HistoryPanel.id: (BuildContext context, RobotsGame gameRef) => HistoryPanel(gameRef: gameRef),
+                        PauseButton.id: (BuildContext context, RobotsGame gameRef) => PauseButton(gameRef: gameRef),
+                        PauseMenu.id: (BuildContext context, RobotsGame gameRef) => PauseMenu(gameRef: gameRef),
+                        HealthIndicator.id: (BuildContext context, RobotsGame gameRef) => HealthIndicator(gameRef: gameRef),
                       },
                     ),
                   ),

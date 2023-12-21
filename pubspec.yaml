@@ -35,6 +35,7 @@ flutter:
 
     - assets/images/
     - assets/audio/
+    - assets/images/HUD/Health/
     - assets/images/Main Characters/
     - assets/images/Main Characters/Mask Dude/
     - assets/images/Main Characters/Ninja Frog/
