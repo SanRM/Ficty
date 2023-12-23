@@ -40,10 +40,11 @@ class HealthIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //var healthImage = 1;
+    double porcentaje = 0;
+    late Color linearProgressIndicatorColor;
 
     return Padding(
-      padding: EdgeInsets.all(40),
+      padding: const EdgeInsets.all(40),
       child: ValueListenableBuilder(
         valueListenable: gameRef.enemiesKilled,
         builder: (context, enemiesKilled, child) {
@@ -56,21 +57,44 @@ class HealthIndicator extends StatelessWidget {
                   //print('numberOfShots: $numberOfShots');
 
                   if (numberOfShots < enemiesCount) {
-                    gameRef.healthImage.value++;
+                    gameRef.health.value--;
                   }
 
-                  double porcentaje = 0;
-
                   if (enemiesCount != 0) {
-                    porcentaje = gameRef.healthImage.value / enemiesCount;
+                    porcentaje = gameRef.health.value / enemiesCount;
                     //porcentaje = enemiesKilled / enemiesCount;
                     porcentaje = porcentaje > 1 ? 1 : porcentaje;
                   }
 
+                  gameRef.health.value = gameRef.health.value > enemiesCount
+                      ? enemiesCount
+                      : gameRef.health.value;
+
                   print('porcentaje: $porcentaje');
+                  print('gameRef.health.value: ${gameRef.health.value}');
 
                   if (porcentaje < 0) {
-                    gameRef.healthImage.value = 0;
+                    gameRef.health.value = 0;
+                  }
+
+                  if (porcentaje >= 1) {
+                    linearProgressIndicatorColor =
+                        const Color.fromARGB(255, 0, 255, 42);
+                  } else if (porcentaje > 0.8) {
+                    linearProgressIndicatorColor =
+                        const Color.fromARGB(255, 0, 255, 170);
+                  } else if (porcentaje > 0.6) {
+                    linearProgressIndicatorColor =
+                        const Color.fromARGB(255, 166, 255, 0);
+                  } else if (porcentaje > 0.4) {
+                    linearProgressIndicatorColor =
+                        const Color.fromARGB(255, 255, 255, 0);
+                  } else if (porcentaje > 0.2) {
+                    linearProgressIndicatorColor =
+                        const Color.fromARGB(255, 255, 170, 0);
+                  } else if (porcentaje >= 0) {
+                    linearProgressIndicatorColor =
+                        const Color.fromARGB(255, 255, 20, 79);
                   }
 
                   return Align(
@@ -81,9 +105,11 @@ class HealthIndicator extends StatelessWidget {
                         children: [
                           LinearProgressIndicator(
                             value: porcentaje,
-                            color: Color.fromARGB(255, 255, 0, 85),
+                            color: linearProgressIndicatorColor,
                           ),
-                          Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.width / 60)),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  top: MediaQuery.of(context).size.width / 60)),
                           Text(
                             'ENEMIGOS $enemiesKilled/$enemiesCount',
                             style: TextStyle(

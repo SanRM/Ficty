@@ -34,12 +34,13 @@ class RobotsGame extends FlameGame
   ValueNotifier enemiesCount = ValueNotifier<int>(0);
   ValueNotifier enemiesKilled = ValueNotifier<int>(0);
   ValueNotifier numberOfShots = ValueNotifier<int>(0);
-  ValueNotifier healthImage = ValueNotifier<int>(0);
+  ValueNotifier health = ValueNotifier<int>(0);
 
   @override
   Future<void> onLoad() async {
     await images.loadAllImages();
 
+    print(health.value);
     _loadLevel();
 
     return super.onLoad();

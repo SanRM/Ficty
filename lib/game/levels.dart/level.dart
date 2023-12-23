@@ -196,12 +196,9 @@ class Level extends World
             robot.setOpacity(0);
             add(robot);
 
-            game.enemiesCount.value++;
-            game.numberOfShots.value++;
-            print(game.enemiesCount);
-
           break;
         }
+        game.health.value = game.enemiesCount.value;
       }
     }
   }

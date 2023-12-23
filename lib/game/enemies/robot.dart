@@ -51,6 +51,9 @@ class Robot extends SpriteAnimationComponent
     _loadAnimations();
     _spawnRobot();
 
+    game.enemiesCount.value++;
+    game.numberOfShots.value++;
+
     return super.onLoad();
   }
 
@@ -141,7 +144,7 @@ class Robot extends SpriteAnimationComponent
   void _die() {
     isActive = false;
 
-    gameRef.healthImage.value = gameRef.healthImage.value - 2;
+    gameRef.health.value = gameRef.health.value + 2;
 
     lifePointsText.text = '';
     lifePoints = 2;
