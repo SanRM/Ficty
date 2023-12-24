@@ -9,6 +9,11 @@ import 'package:flutter_flame_game/game/utils/collision_block.dart';
 import 'package:flutter_flame_game/game/robots_game.dart';
 //import 'package:flutter_flame_game/game/utils/player_effects.dart';
 
+// enum BallState {
+//   inactive,
+//   active
+// }
+
 class Ball extends CircleComponent
     with HasGameRef<RobotsGame>, CollisionCallbacks {
   double playerX;
@@ -51,7 +56,7 @@ class Ball extends CircleComponent
 
   // 4.
   void get resetBall {
-    position = Vector2(playerX, playerY);
+    position = Vector2(game.target.value.x + 10, game.target.value.y + 10);
     collisionCount = 0;
     velocity = Vector2(0, 0);
   }

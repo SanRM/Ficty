@@ -41,7 +41,7 @@ class HealthIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double porcentaje = 0;
-    late Color linearProgressIndicatorColor;
+    Color linearProgressIndicatorColor = Colors.white;
 
     return Padding(
       padding: const EdgeInsets.all(40),

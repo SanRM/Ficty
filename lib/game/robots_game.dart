@@ -21,7 +21,7 @@ class RobotsGame extends FlameGame
     required this.responsiveWidth,
     required this.responsiveHeight,
   }) {
-    //debugMode = true;
+    debugMode = true;
   }
 
   Player player = Player(
@@ -35,6 +35,9 @@ class RobotsGame extends FlameGame
   ValueNotifier enemiesKilled = ValueNotifier<int>(0);
   ValueNotifier numberOfShots = ValueNotifier<int>(0);
   ValueNotifier health = ValueNotifier<int>(0);
+  ValueNotifier target = ValueNotifier<Vector2>(Vector2.zero());
+
+  ValueNotifier<bool> isGameplayActive = ValueNotifier<bool>(false);
 
   @override
   Future<void> onLoad() async {

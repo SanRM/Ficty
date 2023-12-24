@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_flame_game/game/enemies/robot.dart';
 import 'package:flutter_flame_game/game/utils/collision_block.dart';
 import 'package:flutter_flame_game/game/player/ball.dart';
-//import 'package:flame/sprite.dart';
 import 'package:flutter_flame_game/game/player/player.dart';
 import 'package:flutter_flame_game/game/robots_game.dart';
 import 'package:flutter_flame_game/game/utils/player_effects.dart';
@@ -34,6 +33,11 @@ class Level extends World
   onLoad() async {
     print('Loading map...');
 
+    Future.delayed(Duration(seconds: 1), () {
+      game.isGameplayActive.value = true;
+      print('Gameplay active');
+    });
+
     levelTiledComponent = await TiledComponent.load(
         '$levelName.tmx', prefix: 'assets/tiles/$chapter/', Vector2.all(16));
 
@@ -41,7 +45,8 @@ class Level extends World
 
     _spawningObjects();
 
-    _currentPosition = Offset(player.center[0], player.center[1]);
+    _currentPosition = Offset(game.target.value.x + 10, game.target.value.y + 10);
+    //_currentPosition = Offset(game.target.value.x, game.target.value.y);
 
     _addCollisions();
 
@@ -52,42 +57,45 @@ class Level extends World
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    esfera.resetBall;
+    if (game.isGameplayActive.value == true) {
+      esfera.resetBall;
 
-    _currentPosition = Offset(
-        2 * player.center[0] - event.localStartPosition[0],
-        2 * player.center[1] - event.localEndPosition[1]);
+      _currentPosition = Offset(
+          2 * player.center[0] - event.localStartPosition[0],
+          2 * player.center[1] - event.localEndPosition[1]);
 
-    Offset newPosition = Offset(
-        2 * player.center[0] - event.localStartPosition[0],
-        2 * player.center[1] - event.localEndPosition[1]);
+      Offset newPosition = Offset(
+          2 * player.center[0] - event.localStartPosition[0],
+          2 * player.center[1] - event.localEndPosition[1]);
 
-    double distance =
-        (newPosition - Offset(player.center[0], player.center[1])).distance;
-    double radius = 50.0;
+      double distance =
+          (newPosition - Offset(player.center[0], player.center[1])).distance;
+      double radius = 50.0;
 
-    if (distance > radius) {
-      double scale = radius / distance;
-      newPosition = Offset(
-          player.center[0] + (newPosition.dx - player.center[0]) * scale,
-          player.center[1] + (newPosition.dy - player.center[1]) * scale);
-    } else {
-      double scale = radius * distance;
-      newPosition = Offset(
-          player.center[0] - (newPosition.dx + player.center[0]) / scale,
-          player.center[1] - (newPosition.dy + player.center[1]) / scale);
+      if (distance > radius) {
+        double scale = radius / distance;
+        newPosition = Offset(
+            player.center[0] + (newPosition.dx - player.center[0]) * scale,
+            player.center[1] + (newPosition.dy - player.center[1]) * scale);
+      } else {
+        double scale = radius * distance;
+        newPosition = Offset(
+            player.center[0] - (newPosition.dx + player.center[0]) / scale,
+            player.center[1] - (newPosition.dy + player.center[1]) / scale);
+      }
+
+      _currentPosition = newPosition;
+
+      //print(_currentPosition);
     }
-
-    _currentPosition = newPosition;
-
-    //print(_currentPosition);
 
     super.onDragUpdate(event);
   }
 
   @override
   void onDragEnd(DragEndEvent event) {
-    
+
+    if (game.isGameplayActive.value == true) {
     esfera.velocity = Vector2(
       _currentPosition.dx - player.center[0],
       _currentPosition.dy - player.center[1],
@@ -95,24 +103,34 @@ class Level extends World
 
     esfera.paint.color = Colors.white;
 
-    
     game.numberOfShots.value--;
 
     //print('velocity: ${esfera.velocity}');
+      
+    }
+
 
     super.onDragEnd(event);
   }
 
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
 
+    if (game.isGameplayActive.value == true) {
+      
     final paint = Paint()
       ..color = Colors.pink
       ..strokeWidth = 2.0;
 
-    canvas.drawLine(
-        Offset(player.center[0], player.center[1]), _currentPosition, paint);
+    Future.delayed(Duration(seconds: 1), () {
+      paint.color = Colors.transparent;
+    });
+
+    canvas.drawLine(Offset(player.center[0], player.center[1]), _currentPosition, paint);
+    }
+
+    super.render(canvas);
+
   }
 
   void _addCollisions() {
@@ -141,8 +159,7 @@ class Level extends World
     }
   }
 
-  void _spawningObjects() {
-
+  void _spawningObjects() async {
     //HealthIndicator healthIndicator = HealthIndicator();
 
     //add(healthIndicator);
@@ -155,40 +172,58 @@ class Level extends World
     if (spawnPointsLayer != null) {
       for (final spawnPoint in spawnPointsLayer.objects) {
         switch (spawnPoint.class_) {
+          case 'target':
+            print('Target detected at ${spawnPoint.x}, ${spawnPoint.y}');
+            game.target.value = Vector2(spawnPoint.x, spawnPoint.y);
+
+            break;
+
           case 'player':
-            esfera = Ball(playerX: spawnPoint.x + 10, playerY: spawnPoint.y + 10);
+            esfera =
+                Ball(playerX: spawnPoint.x + 10, playerY: spawnPoint.y + 10);
             add(esfera);
 
             PlayerEffects effects = PlayerEffects();
 
-            effects.position = Vector2(spawnPoint.x, spawnPoint.y) - Vector2.all(32);
+            effects.position = game.target.value - Vector2.all(32);
 
             add(effects);
 
             effects.animation = effects.animationsList[PlayerEffectState.appearing];
+            
             Future.delayed(Duration(milliseconds: 350), () {
               effects.animation = effects.animationsList[PlayerEffectState.nullState];
-              player.setOpacity(1);
+              //player.setOpacity(1);
             });
 
             player.position = Vector2(spawnPoint.x, spawnPoint.y);
-            player.setOpacity(0);
+
+            // if (esfera.position.x < game.target.value.x && esfera.position.y < game.target.value.y) {
+            //   player.flipHorizontally();
+            // } else {
+            //   player.flipHorizontally();
+            // }
+
+
+            //player.setOpacity(0);
             add(player);
 
             break;
-          
-          case 'robot':
 
+          case 'robot':
             PlayerEffects effects = PlayerEffects();
             Robot robot = Robot();
 
-            effects.position = Vector2(spawnPoint.x, spawnPoint.y) - Vector2.all(32);
+            effects.position =
+                Vector2(spawnPoint.x, spawnPoint.y) - Vector2.all(32);
 
             add(effects);
 
-            effects.animation = effects.animationsList[PlayerEffectState.appearing];
+            effects.animation =
+                effects.animationsList[PlayerEffectState.appearing];
             Future.delayed(Duration(milliseconds: 350), () {
-              effects.animation = effects.animationsList[PlayerEffectState.nullState];
+              effects.animation =
+                  effects.animationsList[PlayerEffectState.nullState];
               robot.setOpacity(1);
             });
 
@@ -196,7 +231,7 @@ class Level extends World
             robot.setOpacity(0);
             add(robot);
 
-          break;
+            break;
         }
         game.health.value = game.enemiesCount.value;
       }
