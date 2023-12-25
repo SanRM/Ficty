@@ -31,11 +31,11 @@
   <object id="2" name="target" type="target" x="512" y="160" width="32" height="32"/>
   <object id="74" name="enemy" type="robot" x="208" y="160" width="32" height="32"/>
   <object id="77" name="enemy" type="robot" x="352" y="32" width="32" height="32"/>
-  <object id="78" name="enemy" type="robot" x="352" y="288" width="32" height="32"/>
-  <object id="79" name="enemy" type="robot" x="400" y="288" width="32" height="32"/>
-  <object id="80" name="enemy" type="robot" x="304" y="288" width="32" height="32"/>
-  <object id="81" name="enemy" type="robot" x="256" y="288" width="32" height="32"/>
-  <object id="91" name="player" type="player" x="784" y="-48" width="32" height="32"/>
+  <object id="78" name="enemy" type="robot" x="384" y="288" width="32" height="32"/>
+  <object id="79" name="enemy" type="robot" x="480" y="288" width="32" height="32"/>
+  <object id="80" name="enemy" type="robot" x="288" y="288" width="32" height="32"/>
+  <object id="81" name="enemy" type="robot" x="192" y="288" width="32" height="32"/>
+  <object id="91" name="player" type="player" x="720" y="384" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="3" name="collisions">
   <object id="12" type="block" x="144" y="64" width="96" height="16"/>

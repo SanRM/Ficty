@@ -16,6 +16,7 @@ enum PlayerState {
   appearing,
 }
 
+
 class Robot extends SpriteAnimationComponent
     with HasGameRef<RobotsGame>, CollisionCallbacks {
   Robot({
@@ -38,19 +39,25 @@ class Robot extends SpriteAnimationComponent
 
   bool isRightFacing = false;
   final double stepTime = 0.05;
-  int lifePoints = 2;
+  int lifePoints = 3;
+  late int lifePointsCounter = 0;
   List<Ball> collidedBalls = [];
   bool isActive = true;
+  double porcentaje = 0;
+
 
   TextComponent lifePointsText = TextComponent();
 
   @override
   FutureOr<void> onLoad() async {
-    lifePointsText = TextComponent(text: '$lifePoints', position: -Vector2(-15, 15), scale: Vector2.all(0.5));
+    lifePointsText = TextComponent(text: '$lifePoints', position: -Vector2(0, 10), scale: Vector2.all(0.5));
 
     _loadAnimations();
     _spawnRobot();
 
+    lifePointsCounter = lifePoints;
+    // print('lifePointsCounter: $lifePointsCounter');
+    // print('lifePoints: $lifePoints');
     game.enemiesCount.value++;
     game.numberOfShots.value++;
 
@@ -62,17 +69,29 @@ class Robot extends SpriteAnimationComponent
     super.update(dt);
 
     if (isActive) {
-      collidedBalls
-          .removeWhere((ball) => !this.toRect().overlaps(ball.toRect()));
+      collidedBalls.removeWhere((ball) => !this.toRect().overlaps(ball.toRect()));
 
       lifePointsText.text = '$lifePoints';
       add(lifePointsText);
 
+      porcentaje = lifePoints / lifePointsCounter;
+      //print('porcentaje: $porcentaje');
+
       if (lifePoints == 0) {
-        print('Robot died');
+        //print('Robot died');
         _die();
       }
     }
+
+  }
+
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+
+    // Draw the progress bar
+    canvas.drawRect(Rect.fromLTWH(10, -5, size.x / 1.5 * porcentaje, size.y / 20), Paint()..color = Color(0xFF00FF00));
+    porcentaje <= 0 ? 0 : canvas.drawRect(Rect.fromLTWH(10, -5, size.x / 1.5 * 1, size.y / 20), Paint()..color = Color.fromARGB(71, 248, 248, 248));
   }
 
   _loadAnimations() {
@@ -122,7 +141,7 @@ class Robot extends SpriteAnimationComponent
     if (other is Ball && !collidedBalls.contains(other)) {
       collidedBalls.add(other);
       lifePoints--;
-      print(lifePoints);
+      //print(lifePoints);
       animation = animationsList[PlayerState.hit];
 
       Future.delayed(Duration(milliseconds: 350), () {

@@ -41,10 +41,32 @@ class Player extends SpriteAnimationComponent
   @override
   FutureOr<void> onLoad() async {
     _loadAnimations();
-    
+
     _respawn();
 
     return super.onLoad();
+  }
+
+    @override
+  void update(double dt) {
+    super.update(dt);
+
+    double buffer = 20.0; // Adjust this value to increase or decrease the buffer zone
+
+    if (this.x < game.esfera.value.x - buffer) {
+      if (!isRightFacing) {
+        this.flipHorizontallyAroundCenter();
+        isRightFacing = true;
+      }
+    } else if (this.x > game.esfera.value.x + buffer) {
+      if (isRightFacing) {
+        this.flipHorizontallyAroundCenter();
+        isRightFacing = false;
+      }
+    }
+  
+    print('is right facing: $isRightFacing');
+
   }
 
   _loadAnimations() {
@@ -110,7 +132,7 @@ class Player extends SpriteAnimationComponent
       RectangleHitbox(collisionType: CollisionType.active),
     );
 
-    Vector2 targetPosition = game.target.value; 
+    Vector2 targetPosition = game.target.value;
 
     add(
       MoveToEffect(
@@ -120,7 +142,5 @@ class Player extends SpriteAnimationComponent
     );
 
     animation = animationsList[PlayerState.falling];
-    
-    flipHorizontallyAroundCenter();
   }
 }

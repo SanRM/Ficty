@@ -62,6 +62,8 @@ class HealthIndicator extends StatelessWidget {
 
                   if (enemiesCount != 0) {
                     porcentaje = gameRef.health.value / enemiesCount;
+                    // print('health: ${gameRef.health.value}');
+                    // print('enemiesCount: $enemiesCount');
                     //porcentaje = enemiesKilled / enemiesCount;
                     porcentaje = porcentaje > 1 ? 1 : porcentaje;
                   }
@@ -70,8 +72,8 @@ class HealthIndicator extends StatelessWidget {
                       ? enemiesCount
                       : gameRef.health.value;
 
-                  print('porcentaje: $porcentaje');
-                  print('gameRef.health.value: ${gameRef.health.value}');
+                  //print('porcentaje: $porcentaje');
+                  //print('gameRef.health.value: ${gameRef.health.value}');
 
                   if (porcentaje < 0) {
                     gameRef.health.value = 0;

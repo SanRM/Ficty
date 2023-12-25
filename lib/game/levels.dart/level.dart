@@ -27,15 +27,16 @@ class Level extends World
 
   late TiledComponent levelTiledComponent;
   late Offset _currentPosition;
-  late Ball esfera;
+  //late Ball esfera;
+  late bool dragOnCenter;
 
   @override
   onLoad() async {
-    print('Loading map...');
+    //print('Loading map...');
 
     Future.delayed(Duration(seconds: 1), () {
       game.isGameplayActive.value = true;
-      print('Gameplay active');
+      //print('Gameplay active');
     });
 
     levelTiledComponent = await TiledComponent.load(
@@ -43,9 +44,12 @@ class Level extends World
 
     add(levelTiledComponent);
 
+    dragOnCenter = true;
+
     _spawningObjects();
 
-    _currentPosition = Offset(game.target.value.x + 10, game.target.value.y + 10);
+    _currentPosition =
+        Offset(game.target.value.x + 10, game.target.value.y + 10);
     //_currentPosition = Offset(game.target.value.x, game.target.value.y);
 
     _addCollisions();
@@ -58,7 +62,8 @@ class Level extends World
   @override
   void onDragUpdate(DragUpdateEvent event) {
     if (game.isGameplayActive.value == true) {
-      esfera.resetBall;
+      dragOnCenter = true;
+      game.esfera.value.resetBall;
 
       _currentPosition = Offset(
           2 * player.center[0] - event.localStartPosition[0],
@@ -78,6 +83,9 @@ class Level extends World
             player.center[0] + (newPosition.dx - player.center[0]) * scale,
             player.center[1] + (newPosition.dy - player.center[1]) * scale);
       } else {
+
+        dragOnCenter = false;
+
         double scale = radius * distance;
         newPosition = Offset(
             player.center[0] - (newPosition.dx + player.center[0]) / scale,
@@ -94,43 +102,38 @@ class Level extends World
 
   @override
   void onDragEnd(DragEndEvent event) {
+    if (game.isGameplayActive.value && dragOnCenter) {
+      game.esfera.value.velocity = Vector2(
+        _currentPosition.dx - player.center[0],
+        _currentPosition.dy - player.center[1],
+      );
 
-    if (game.isGameplayActive.value == true) {
-    esfera.velocity = Vector2(
-      _currentPosition.dx - player.center[0],
-      _currentPosition.dy - player.center[1],
-    );
+      game.esfera.value.paint.color = Colors.white;
 
-    esfera.paint.color = Colors.white;
+      game.numberOfShots.value--;
 
-    game.numberOfShots.value--;
-
-    //print('velocity: ${esfera.velocity}');
-      
+      //print('velocity: ${esfera.velocity}');
     }
-
 
     super.onDragEnd(event);
   }
 
   @override
   void render(Canvas canvas) {
-
     if (game.isGameplayActive.value == true) {
-      
-    final paint = Paint()
-      ..color = Colors.pink
-      ..strokeWidth = 2.0;
+      final paint = Paint()
+        ..color = Colors.pink
+        ..strokeWidth = 2.0;
 
-    Future.delayed(Duration(seconds: 1), () {
-      paint.color = Colors.transparent;
-    });
+      Future.delayed(Duration(seconds: 1), () {
+        paint.color = Colors.transparent;
+      });
 
-    canvas.drawLine(Offset(player.center[0], player.center[1]), _currentPosition, paint);
+      canvas.drawLine(
+          Offset(player.center[0], player.center[1]), _currentPosition, paint);
     }
 
     super.render(canvas);
-
   }
 
   void _addCollisions() {
@@ -179,31 +182,31 @@ class Level extends World
             break;
 
           case 'player':
-            esfera =
-                Ball(playerX: spawnPoint.x + 10, playerY: spawnPoint.y + 10);
-            add(esfera);
+            game.esfera.value = Ball(playerX: spawnPoint.x + 10, playerY: spawnPoint.y + 10);
+            add(game.esfera.value);
 
-            PlayerEffects effects = PlayerEffects();
+            // PlayerEffects effects = PlayerEffects();
 
-            effects.position = game.target.value - Vector2.all(32);
+            // effects.position = game.target.value - Vector2.all(32);
 
-            add(effects);
+            // add(effects);
 
-            effects.animation = effects.animationsList[PlayerEffectState.appearing];
-            
-            Future.delayed(Duration(milliseconds: 350), () {
-              effects.animation = effects.animationsList[PlayerEffectState.nullState];
-              //player.setOpacity(1);
-            });
+            // effects.animation =
+            //     effects.animationsList[PlayerEffectState.appearing];
+
+            // Future.delayed(Duration(milliseconds: 350), () {
+            //   effects.animation =
+            //       effects.animationsList[PlayerEffectState.nullState];
+            //   //player.setOpacity(1);
+            // });
 
             player.position = Vector2(spawnPoint.x, spawnPoint.y);
 
-            // if (esfera.position.x < game.target.value.x && esfera.position.y < game.target.value.y) {
-            //   player.flipHorizontally();
-            // } else {
-            //   player.flipHorizontally();
-            // }
-
+            if (player.center.x < game.esfera.value.x && player.center.y < game.esfera.value.y) {
+            } else {
+              player.anchor = Anchor.topRight;
+              player.flipHorizontallyAroundCenter();
+            }
 
             //player.setOpacity(0);
             add(player);

@@ -3,6 +3,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flame_game/game/levels.dart/level.dart';
+import 'package:flutter_flame_game/game/player/ball.dart';
 import 'package:flutter_flame_game/game/player/player.dart';
 
 class RobotsGame extends FlameGame
@@ -21,7 +22,7 @@ class RobotsGame extends FlameGame
     required this.responsiveWidth,
     required this.responsiveHeight,
   }) {
-    debugMode = true;
+    //debugMode = true;
   }
 
   Player player = Player(
@@ -38,12 +39,14 @@ class RobotsGame extends FlameGame
   ValueNotifier target = ValueNotifier<Vector2>(Vector2.zero());
 
   ValueNotifier<bool> isGameplayActive = ValueNotifier<bool>(false);
+  ValueNotifier<Ball> esfera = ValueNotifier<Ball>(Ball(playerX: 0, playerY: 0));
+  
 
   @override
   Future<void> onLoad() async {
     await images.loadAllImages();
 
-    print(health.value);
+    //print(health.value);
     _loadLevel();
 
     return super.onLoad();
