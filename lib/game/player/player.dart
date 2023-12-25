@@ -16,8 +16,7 @@ enum PlayerState {
   appearing,
 }
 
-class Player extends SpriteAnimationComponent
-    with HasGameRef<RobotsGame>, CollisionCallbacks {
+class Player extends SpriteAnimationComponent with HasGameRef<RobotsGame>, CollisionCallbacks {
   Player({this.character = 'Ninja Frog'}) : super() {
     //debugMode = true;
     debugColor = Color.fromARGB(255, 0, 255, 136);

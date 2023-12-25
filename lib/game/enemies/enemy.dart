@@ -1,8 +1,7 @@
-import 'dart:async';
+import 'dart:ui';
 
-import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flutter/material.dart';
+import 'package:flame/collisions.dart';
 import 'package:flutter_flame_game/game/player/ball.dart';
 import 'package:flutter_flame_game/game/robots_game.dart';
 import 'package:flutter_flame_game/game/utils/player_effects.dart';
@@ -16,15 +15,11 @@ enum EnemyState {
   appearing,
 }
 
-class Robot extends SpriteAnimationComponent with HasGameRef<RobotsGame>, CollisionCallbacks {
-  Robot({
-    this.character = 'Mask Dude',
-  }) : super() {
-    //debugMode = true;
-    debugColor = Colors.red;
-  }
+abstract class Enemy extends SpriteAnimationComponent
+    with HasGameRef<RobotsGame>, CollisionCallbacks {
+  Enemy() : super(size: Vector2.all(50.0));
 
-  final String character;
+  TextComponent lifePointsText = TextComponent();
 
   late final SpriteAnimation idleAnimation;
   late final SpriteAnimation runningAnimation;
@@ -35,20 +30,24 @@ class Robot extends SpriteAnimationComponent with HasGameRef<RobotsGame>, Collis
 
   late final Map animationsList;
 
-  bool isRightFacing = false;
-  final double stepTime = 0.05;
   int lifePoints = 3;
   late int lifePointsCounter = 0;
-  List<Ball> collidedBalls = [];
+  final double stepTime = 0.05;
+  String character = 'Mask Dude';
   bool isActive = true;
+  List<Ball> collidedBalls = [];
   double porcentaje = 0;
 
-
-  TextComponent lifePointsText = TextComponent();
+  // set character(String character) {
+  //   _character = character;
+  // }
 
   @override
-  FutureOr<void> onLoad() async {
-    lifePointsText = TextComponent(text: '$lifePoints', position: -Vector2(0, 10), scale: Vector2.all(0.5));
+  onLoad() async {
+    lifePointsText = TextComponent(
+        text: '$lifePoints',
+        position: -Vector2(0, 10),
+        scale: Vector2.all(0.5));
 
     _loadAnimations();
     _spawnRobot();
@@ -60,36 +59,6 @@ class Robot extends SpriteAnimationComponent with HasGameRef<RobotsGame>, Collis
     game.numberOfShots.value++;
 
     return super.onLoad();
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-
-    if (isActive) {
-      collidedBalls.removeWhere((ball) => !this.toRect().overlaps(ball.toRect()));
-
-      lifePointsText.text = '$lifePoints';
-      add(lifePointsText);
-
-      porcentaje = lifePoints / lifePointsCounter;
-      //print('porcentaje: $porcentaje');
-
-      if (lifePoints == 0) {
-        //print('Robot died');
-        _die();
-      }
-    }
-
-  }
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-
-    // Draw the progress bar
-    canvas.drawRect(Rect.fromLTWH(10, -5, size.x / 1.5 * porcentaje, size.y / 20), Paint()..color = Color(0xFF00FF00));
-    porcentaje <= 0 ? 0 : canvas.drawRect(Rect.fromLTWH(10, -5, size.x / 1.5 * 1, size.y / 20), Paint()..color = Color.fromARGB(71, 248, 248, 248));
   }
 
   _loadAnimations() {
@@ -134,7 +103,15 @@ class Robot extends SpriteAnimationComponent with HasGameRef<RobotsGame>, Collis
     );
   }
 
-  @override
+  void _spawnRobot() {
+    add(
+      RectangleHitbox(collisionType: CollisionType.active),
+    );
+
+    animation = animationsList[EnemyState.idle];
+  }
+
+@override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     if (other is Ball && !collidedBalls.contains(other)) {
       collidedBalls.add(other);
@@ -150,12 +127,34 @@ class Robot extends SpriteAnimationComponent with HasGameRef<RobotsGame>, Collis
     super.onCollision(intersectionPoints, other);
   }
 
-  void _spawnRobot() {
-    add(
-      RectangleHitbox(collisionType: CollisionType.active),
-    );
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
 
-    animation = animationsList[EnemyState.idle];
+    // Draw the progress bar
+    canvas.drawRect(Rect.fromLTWH(10, -5, size.x / 1.5 * porcentaje, size.y / 20), Paint()..color = Color(0xFF00FF00));
+    porcentaje <= 0 ? 0 : canvas.drawRect(Rect.fromLTWH(10, -5, size.x / 1.5 * 1, size.y / 20), Paint()..color = Color.fromARGB(71, 248, 248, 248));
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+
+    if (isActive) {
+      collidedBalls
+          .removeWhere((ball) => !this.toRect().overlaps(ball.toRect()));
+
+      lifePointsText.text = '$lifePoints';
+      add(lifePointsText);
+
+      porcentaje = lifePoints / lifePointsCounter;
+      //print('porcentaje: $porcentaje');
+
+      if (lifePoints == 0) {
+        //print('Robot died');
+        _die();
+      }
+    }
   }
 
   void _die() {
@@ -181,4 +180,5 @@ class Robot extends SpriteAnimationComponent with HasGameRef<RobotsGame>, Collis
 
     game.enemiesKilled.value++;
   }
+
 }
