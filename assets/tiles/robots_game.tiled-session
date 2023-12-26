@@ -5,34 +5,46 @@
     },
     "activeFile": "chapter-1/level-1.tmx",
     "expandedProjectPaths": [
-        ".",
         "chapter2",
+        ".",
         "chapter1"
     ],
     "file.lastUsedOpenFilter": "Todos los archivos (*)",
     "fileStates": {
         "chapter-1/level-1.tmx": {
             "expandedObjectLayers": [
-                3,
-                2
+                2,
+                3
             ],
-            "scale": 1.5,
+            "scale": 0.75,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 384,
-                "y": 175.66666666666663
+                "x": 289.3333333333333,
+                "y": 254.66666666666669
             }
         },
         "chapter-1/level-2.tmx": {
             "expandedObjectLayers": [
-                3,
-                2
+                2,
+                3
             ],
             "scale": 1,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 318,
+                "y": 199
+            }
+        },
+        "chapter-1/level-3.tmx": {
+            "expandedObjectLayers": [
+                2,
+                3
+            ],
+            "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 320,
-                "y": 200.5
+                "x": 442.6666666666667,
+                "y": 180
             }
         },
         "chapter-2/level-2.tmx": {

@@ -2,36 +2,29 @@ import 'package:flame/components.dart';
 import 'package:flutter_flame_game/game/enemies/enemy.dart';
 
 class RobotEnemy extends Enemy {
-  RobotEnemy() : super() {
+  RobotEnemy(this.spawnPoint) : super(spawnPoint) {
     // Initialize Robot-specific properties here
   }
 
-  TextComponent lifePointsText = TextComponent();
+  final Vector2 spawnPoint;
+  
+  //10. Not necesary to override but it's here for reference purposes, the default value is true
+  @override
+  void spawnEffects(bool enabled) {
+    super.spawnEffects(true);
+  }
 
   @override
   onLoad() async {
-    lifePointsText = TextComponent(text: '$lifePoints', position: -Vector2(0, 10), scale: Vector2.all(0.5));
-
+    
     character = 'Mask Dude';
+    lifePoints = 3; 
 
     //_spawnRobot();
 
     return super.onLoad();
   }
 
-  @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    super.onCollision(intersectionPoints, other);
+  //Specific Robot methods here
 
-    // Handle Robot-specific collision logic here
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-
-    // Update Robot-specific logic here
-  }
-
-  // Add any Robot-specific methods here
 }

@@ -17,7 +17,9 @@ enum EnemyState {
 
 abstract class Enemy extends SpriteAnimationComponent
     with HasGameRef<RobotsGame>, CollisionCallbacks {
-  Enemy() : super(size: Vector2.all(50.0));
+  Enemy(this.spawnPoint);
+
+  final Vector2 spawnPoint;
 
   TextComponent lifePointsText = TextComponent();
 
@@ -30,7 +32,7 @@ abstract class Enemy extends SpriteAnimationComponent
 
   late final Map animationsList;
 
-  int lifePoints = 3;
+  int lifePoints = 1;
   late int lifePointsCounter = 0;
   final double stepTime = 0.05;
   String character = 'Mask Dude';
@@ -51,6 +53,7 @@ abstract class Enemy extends SpriteAnimationComponent
 
     _loadAnimations();
     _spawnRobot();
+    spawnEffects(true);
 
     lifePointsCounter = lifePoints;
     // print('lifePointsCounter: $lifePointsCounter');
@@ -104,6 +107,8 @@ abstract class Enemy extends SpriteAnimationComponent
   }
 
   void _spawnRobot() {
+    position = spawnPoint;
+
     add(
       RectangleHitbox(collisionType: CollisionType.active),
     );
@@ -111,7 +116,7 @@ abstract class Enemy extends SpriteAnimationComponent
     animation = animationsList[EnemyState.idle];
   }
 
-@override
+  @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     if (other is Ball && !collidedBalls.contains(other)) {
       collidedBalls.add(other);
@@ -131,9 +136,30 @@ abstract class Enemy extends SpriteAnimationComponent
   void render(Canvas canvas) {
     super.render(canvas);
 
-    // Draw the progress bar
-    canvas.drawRect(Rect.fromLTWH(10, -5, size.x / 1.5 * porcentaje, size.y / 20), Paint()..color = Color(0xFF00FF00));
-    porcentaje <= 0 ? 0 : canvas.drawRect(Rect.fromLTWH(10, -5, size.x / 1.5 * 1, size.y / 20), Paint()..color = Color.fromARGB(71, 248, 248, 248));
+    if (isFlippedHorizontally) {
+      canvas.scale(-1, 1);
+      canvas.translate(-32, 0);
+      // Draw the progress bar
+      canvas.drawRect(
+          Rect.fromLTWH(10, -5, size.x / 1.5 * porcentaje, size.y / 20),
+          Paint()..color = Color(0xFF00FF00));
+      porcentaje <= 0
+          ? 0
+          : canvas.drawRect(
+              Rect.fromLTWH(10, -5, size.x / 1.5 * 1, size.y / 20),
+              Paint()..color = Color.fromARGB(71, 248, 248, 248),
+            );
+    } else {
+      canvas.drawRect(
+          Rect.fromLTWH(10, -5, size.x / 1.5 * porcentaje, size.y / 20),
+          Paint()..color = Color(0xFF00FF00));
+      porcentaje <= 0
+          ? 0
+          : canvas.drawRect(
+              Rect.fromLTWH(10, -5, size.x / 1.5 * 1, size.y / 20),
+              Paint()..color = Color.fromARGB(71, 248, 248, 248),
+            );
+    }
   }
 
   @override
@@ -181,4 +207,21 @@ abstract class Enemy extends SpriteAnimationComponent
     game.enemiesKilled.value++;
   }
 
+  void spawnEffects(bool enabled) {
+    if (enabled) {
+      PlayerEffects effects = PlayerEffects();
+
+      effects.position = -Vector2.all(32);
+
+      add(effects);
+
+      effects.animation = effects.animationsList[PlayerEffectState.appearing];
+      Future.delayed(Duration(milliseconds: 350), () {
+        effects.animation = effects.animationsList[PlayerEffectState.nullState];
+        this.setOpacity(1);
+      });
+
+      this.setOpacity(0);
+    }
+  }
 }

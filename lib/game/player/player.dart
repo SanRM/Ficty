@@ -36,6 +36,7 @@ class Player extends SpriteAnimationComponent with HasGameRef<RobotsGame>, Colli
   bool isRightFacing = false;
   final double stepTime = 0.05;
   bool isFirstTime = true;
+  double buffer = 20.0; 
 
   @override
   FutureOr<void> onLoad() async {
@@ -46,25 +47,25 @@ class Player extends SpriteAnimationComponent with HasGameRef<RobotsGame>, Colli
     return super.onLoad();
   }
 
-    @override
+  @override
   void update(double dt) {
     super.update(dt);
 
-    double buffer = 20.0; // Adjust this value to increase or decrease the buffer zone
-
-    if (this.x < game.esfera.value.x - buffer) {
-      if (!isRightFacing) {
-        this.flipHorizontallyAroundCenter();
-        isRightFacing = true;
-      }
-    } else if (this.x > game.esfera.value.x + buffer) {
+    if (x < game.esfera.value.x - buffer) {
       if (isRightFacing) {
-        this.flipHorizontallyAroundCenter();
+        flipHorizontallyAroundCenter();
         isRightFacing = false;
+        
+      }
+    } else if (x > game.esfera.value.x + buffer) {
+      if (!isRightFacing) {
+        flipHorizontallyAroundCenter();
+        isRightFacing = true;
+        
       }
     }
   
-    print('is right facing: $isRightFacing');
+    //print('is right facing: $isRightFacing');
 
   }
 
@@ -125,13 +126,13 @@ class Player extends SpriteAnimationComponent with HasGameRef<RobotsGame>, Colli
   }
 
   void _respawn() {
-    //MoveByEffect(Vector2(0, 100), EffectController(duration: 2));
 
     add(
       RectangleHitbox(collisionType: CollisionType.active),
     );
 
     Vector2 targetPosition = game.target.value;
+    anchor = Anchor.topRight;
 
     add(
       MoveToEffect(

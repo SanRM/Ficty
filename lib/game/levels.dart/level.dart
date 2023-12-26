@@ -3,15 +3,17 @@ import 'dart:ui';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_flame_game/game/enemies/robot.dart';
+import 'package:flutter_flame_game/game/enemies/drone_enemy.dart';
+import 'package:flutter_flame_game/game/enemies/robot_enemy.dart';
+import 'package:flutter_flame_game/game/enemies/shieldBearer_enemy.dart';
 import 'package:flutter_flame_game/game/utils/collision_block.dart';
 import 'package:flutter_flame_game/game/player/ball.dart';
 import 'package:flutter_flame_game/game/player/player.dart';
 import 'package:flutter_flame_game/game/robots_game.dart';
-import 'package:flutter_flame_game/game/utils/player_effects.dart';
 
 class Level extends World
     with HasGameRef<RobotsGame>, CollisionCallbacks, DragCallbacks {
@@ -29,6 +31,7 @@ class Level extends World
   late Offset _currentPosition;
   //late Ball esfera;
   late bool dragOnCenter;
+  Vector2 droneDestino = Vector2.zero();
 
   @override
   onLoad() async {
@@ -83,7 +86,6 @@ class Level extends World
             player.center[0] + (newPosition.dx - player.center[0]) * scale,
             player.center[1] + (newPosition.dy - player.center[1]) * scale);
       } else {
-
         dragOnCenter = false;
 
         double scale = radius * distance;
@@ -175,9 +177,15 @@ class Level extends World
     if (spawnPointsLayer != null) {
       for (final spawnPoint in spawnPointsLayer.objects) {
         switch (spawnPoint.class_) {
-          case 'target':
-            print('Target detected at ${spawnPoint.x}, ${spawnPoint.y}');
+          case 'player target':
+            //print('Player target detected at ${spawnPoint.x}, ${spawnPoint.y}');
             game.target.value = Vector2(spawnPoint.x, spawnPoint.y);
+
+            break;
+
+          case 'drone target':
+            droneDestino = Vector2(spawnPoint.x, spawnPoint.y);
+            //print('Drone target detected at ${droneDestino} in level.dart');
 
             break;
 
@@ -202,37 +210,35 @@ class Level extends World
 
             player.position = Vector2(spawnPoint.x, spawnPoint.y);
 
-            if (player.center.x < game.esfera.value.x && player.center.y < game.esfera.value.y) {
-            } else {
-              player.anchor = Anchor.topRight;
-              player.flipHorizontallyAroundCenter();
-            }
-
-            //player.setOpacity(0);
             add(player);
 
             break;
 
           case 'robot':
-            PlayerEffects effects = PlayerEffects();
-            Robot robot = Robot();
-
-            effects.position =
-                Vector2(spawnPoint.x, spawnPoint.y) - Vector2.all(32);
-
-            add(effects);
-
-            effects.animation =
-                effects.animationsList[PlayerEffectState.appearing];
-            Future.delayed(Duration(milliseconds: 350), () {
-              effects.animation =
-                  effects.animationsList[PlayerEffectState.nullState];
-              robot.setOpacity(1);
-            });
-
-            robot.position = Vector2(spawnPoint.x, spawnPoint.y);
-            robot.setOpacity(0);
+            RobotEnemy robot = RobotEnemy(Vector2(spawnPoint.x, spawnPoint.y));
             add(robot);
+
+            break;
+
+          case 'shieldBearer':
+            ShieldBearer shieldBearer =
+                ShieldBearer(Vector2(spawnPoint.x, spawnPoint.y));
+            add(shieldBearer);
+
+            break;
+
+          case 'drone':
+            Future.delayed(
+              Duration(microseconds: 1),
+              () {
+                if (droneDestino != Vector2.zero()) {
+                  DroneEnemy drone = DroneEnemy(
+                      spawnPoint: Vector2(spawnPoint.x, spawnPoint.y),
+                      target: droneDestino);
+                  add(drone);
+                }
+              },
+            );
 
             break;
         }

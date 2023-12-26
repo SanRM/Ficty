@@ -36,6 +36,7 @@ class RobotsGame extends FlameGame
   ValueNotifier enemiesKilled = ValueNotifier<int>(0);
   ValueNotifier numberOfShots = ValueNotifier<int>(0);
   ValueNotifier health = ValueNotifier<int>(0);
+
   ValueNotifier target = ValueNotifier<Vector2>(Vector2.zero());
 
   ValueNotifier<bool> isGameplayActive = ValueNotifier<bool>(false);
