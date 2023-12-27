@@ -36,6 +36,12 @@ flutter:
     - assets/images/
     - assets/audio/
     - assets/images/HUD/Health/
+
+    - assets/images/Enemies/Mushroom/
+    - assets/images/Enemies/BlueBird/
+    - assets/images/Enemies/Ghost/
+    - assets/images/Enemies/Bunny/
+    
     - assets/images/Main Characters/
     - assets/images/Main Characters/Mask Dude/
     - assets/images/Main Characters/Ninja Frog/

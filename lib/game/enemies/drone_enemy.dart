@@ -20,7 +20,7 @@ class DroneEnemy extends Enemy {
 
   @override
   onLoad() async {
-    character = 'Pink Man';
+    character = 'BlueBird';
     lifePoints = 2;
 
     // add(
@@ -32,6 +32,9 @@ class DroneEnemy extends Enemy {
     //     ),
     //   ),
     // );
+
+    flipHorizontallyAroundCenter();
+    anchor = Anchor.topRight;
 
     add(
       MoveToEffect(
@@ -58,4 +61,31 @@ class DroneEnemy extends Enemy {
 
     return super.onLoad();
   }
+
+  @override
+  loadAnimations() {
+    idleAnimation = spriteAnimation('Idle', 9);
+    hitAnimation = spriteAnimation('Hit', 5)..loop = false;
+
+    animationsList = {
+      EnemyState.idle: idleAnimation,
+      EnemyState.hit: hitAnimation,
+    };
+
+    animation = animationsList[EnemyState.idle];
+  }
+
+  @override
+  SpriteAnimation spriteAnimation(String state, int amount) {
+    return SpriteAnimation.fromFrameData(
+      game.images.fromCache('Enemies/$character/$state (32x32).png'),
+      SpriteAnimationData.sequenced(
+        amount: amount,
+        stepTime: stepTime,
+        textureSize: Vector2.all(32),
+      ),
+    );
+  }
+
+
 }

@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_flame_game/game/enemies/drone_enemy.dart';
 import 'package:flutter_flame_game/game/enemies/robot_enemy.dart';
 import 'package:flutter_flame_game/game/enemies/shieldBearer_enemy.dart';
+import 'package:flutter_flame_game/game/enemies/teleporter_enemy.dart';
 import 'package:flutter_flame_game/game/utils/collision_block.dart';
 import 'package:flutter_flame_game/game/player/ball.dart';
 import 'package:flutter_flame_game/game/player/player.dart';
@@ -183,30 +184,10 @@ class Level extends World
 
             break;
 
-          case 'drone target':
-            droneDestino = Vector2(spawnPoint.x, spawnPoint.y);
-            //print('Drone target detected at ${droneDestino} in level.dart');
-
-            break;
-
           case 'player':
-            game.esfera.value = Ball(playerX: spawnPoint.x + 10, playerY: spawnPoint.y + 10);
+            game.esfera.value =
+                Ball(playerX: spawnPoint.x + 10, playerY: spawnPoint.y + 10);
             add(game.esfera.value);
-
-            // PlayerEffects effects = PlayerEffects();
-
-            // effects.position = game.target.value - Vector2.all(32);
-
-            // add(effects);
-
-            // effects.animation =
-            //     effects.animationsList[PlayerEffectState.appearing];
-
-            // Future.delayed(Duration(milliseconds: 350), () {
-            //   effects.animation =
-            //       effects.animationsList[PlayerEffectState.nullState];
-            //   //player.setOpacity(1);
-            // });
 
             player.position = Vector2(spawnPoint.x, spawnPoint.y);
 
@@ -215,34 +196,55 @@ class Level extends World
             break;
 
           case 'robot':
-            RobotEnemy robot = RobotEnemy(Vector2(spawnPoint.x, spawnPoint.y));
+            RobotEnemy robot = RobotEnemy(spawnPoint: Vector2(spawnPoint.x, spawnPoint.y - 11));
             add(robot);
 
             break;
 
           case 'shieldBearer':
-            ShieldBearer shieldBearer =
-                ShieldBearer(Vector2(spawnPoint.x, spawnPoint.y));
+            ShieldBearer shieldBearer = ShieldBearer(spawnPoint: Vector2(spawnPoint.x, spawnPoint.y));
             add(shieldBearer);
 
             break;
 
           case 'drone':
-            Future.delayed(
-              Duration(microseconds: 1),
-              () {
-                if (droneDestino != Vector2.zero()) {
-                  DroneEnemy drone = DroneEnemy(
-                      spawnPoint: Vector2(spawnPoint.x, spawnPoint.y),
-                      target: droneDestino);
-                  add(drone);
-                }
-              },
+            var targetObjectId = spawnPoint.properties.first.value;
+            var target = spawnPointsLayer.objects
+                .firstWhere((element) => element.id == targetObjectId);
+
+            DroneEnemy drone = DroneEnemy(
+              spawnPoint: Vector2(spawnPoint.x, spawnPoint.y),
+              target: Vector2(target.x, target.y),
             );
+
+            add(drone);
+
+            break;
+
+          case 'teleporter':
+
+            var firstTargetobjectid = spawnPoint.properties.first.value;
+            var firstTarget = spawnPointsLayer.objects.firstWhere((element) => element.id == firstTargetobjectid);
+            var firstVectorTarget = Vector2(firstTarget.x, firstTarget.y);
+
+            var secondTargetobjectid = firstTarget.properties.first.value;
+            var secondTarget = spawnPointsLayer.objects.firstWhere((element) => element.id == secondTargetobjectid);
+            var secondVectorTarget = Vector2(secondTarget.x, secondTarget.y);
+
+            TeleporterEnemy teleporter = TeleporterEnemy(
+              spawnPoint: Vector2(spawnPoint.x - 7, spawnPoint.y + 4),
+              firstTarget: firstVectorTarget,
+              secondTarget: secondVectorTarget,
+            );
+
+            add(teleporter);
 
             break;
         }
-        game.health.value = game.enemiesCount.value;
+
+        Future.delayed(Duration(microseconds: 2), () {
+          game.health.value = game.enemiesCount.value;
+        });
       }
     }
   }

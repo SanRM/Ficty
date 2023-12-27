@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_flame_game/game/enemies/teleporter_enemy.dart';
 import 'package:flutter_flame_game/game/utils/ball_effects.dart';
 import 'package:flutter_flame_game/game/utils/collision_block.dart';
 import 'package:flutter_flame_game/game/robots_game.dart';
@@ -63,7 +64,8 @@ class Ball extends CircleComponent
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if (other is CollisionBlock) {
+    
+    if (other is CollisionBlock || other is TeleporterEnemy) {
       // Determine the side of the collision
       double otherBottom = other.position.y + other.size.y;
       double otherRight = other.position.x + other.size.x;

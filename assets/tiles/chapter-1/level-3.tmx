@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="48" height="22" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="46">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="48" height="22" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="70">
  <tileset firstgid="1" source="../patrones_game.tsx"/>
  <layer id="1" name="Capa de patrones 1" width="48" height="22">
   <data encoding="csv">
@@ -8,17 +8,17 @@
 126,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,126,
 126,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,126,
 126,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,126,
-126,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,126,
-126,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,197,0,0,0,0,0,0,0,0,197,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,126,
-126,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,241,0,0,0,0,0,0,0,0,241,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,126,
-126,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,62,63,63,63,63,63,63,63,63,64,0,0,18,19,19,20,0,0,0,0,0,0,0,0,0,0,0,126,
-126,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,126,
+126,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,197,0,0,0,0,0,0,0,0,0,197,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,126,
+126,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,241,0,0,0,0,0,0,0,0,0,241,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,126,
+126,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,18,19,19,20,0,0,0,0,0,0,0,0,0,0,0,126,
 126,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,126,
 126,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,126,
 126,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,126,
 126,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,126,
-126,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,126,
-126,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,62,63,63,63,63,63,63,63,63,63,63,63,63,63,63,64,0,0,0,0,0,0,0,0,0,0,0,126,
+126,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1610612800,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,126,
+126,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1610612798,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,126,
+126,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,194,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,196,0,0,0,0,0,0,0,0,0,0,0,126,
+126,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,18,19,19,19,19,19,19,19,19,19,19,19,19,19,20,0,0,0,0,0,0,0,0,0,0,0,0,126,
 126,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,126,
 126,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,126,
 126,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,126,
@@ -27,20 +27,48 @@
 205,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,206,207
 </data>
  </layer>
- <objectgroup id="2" name="spawn">
-  <object id="5" name="player target" type="player target" x="528" y="96" width="32" height="32"/>
+ <objectgroup color="#6b9aff" id="2" name="spawn">
+  <object id="5" name="player target" type="player target" x="528" y="80" width="32" height="32"/>
   <object id="16" name="player" type="player" x="784" y="-48" width="32" height="32"/>
-  <object id="17" name="robot" type="robot" x="528" y="208" width="32" height="32"/>
-  <object id="35" name="drone" type="drone" x="336" y="96" width="32" height="32"/>
-  <object id="42" name="drone target" type="drone target" x="432" y="96" width="32" height="32"/>
-  <object id="43" name="shieldBearer" type="shieldBearer" x="336" y="208" width="32" height="32"/>
+  <object id="17" name="robot" type="robot" x="528" y="192" width="32" height="32"/>
+  <object id="35" name="drone" type="drone" x="320" y="80" width="32" height="32">
+   <properties>
+    <property name="target" type="object" value="62"/>
+   </properties>
+  </object>
+  <object id="43" name="shieldBearer" type="shieldBearer" x="320" y="192" width="32" height="32"/>
+  <object id="56" name="teleporter" type="teleporter" x="320" y="256" width="32" height="32">
+   <properties>
+    <property name="1" type="object" value="68"/>
+   </properties>
+  </object>
+  <object id="57" name="drone" type="drone" x="656" y="96" width="32" height="32">
+   <properties>
+    <property name="target" type="object" value="59"/>
+   </properties>
+  </object>
+  <object id="59" name="drone target" type="target" x="656" y="224" width="32" height="32"/>
+  <object id="62" name="drone target" x="432" y="80" width="32" height="32"/>
+  <object id="64" name="drone" type="drone" x="80" y="80" width="32" height="32">
+   <properties>
+    <property name="a" type="object" value="65"/>
+   </properties>
+  </object>
+  <object id="65" x="208" y="208" width="32" height="32"/>
+  <object id="68" x="432" y="256" width="32" height="32">
+   <properties>
+    <property name="2" type="object" value="69"/>
+   </properties>
+  </object>
+  <object id="69" x="528" y="256" width="32" height="32"/>
  </objectgroup>
- <objectgroup id="3" name="collisions">
-  <object id="2" type="block" x="320" y="240" width="256" height="5.25"/>
+ <objectgroup color="#ff94b1" id="3" name="collisions">
+  <object id="2" type="block" x="320" y="240" width="240" height="5.25"/>
   <object id="12" type="block" x="0" y="320" width="768" height="32"/>
   <object id="13" type="block" x="16" y="0" width="736" height="16"/>
   <object id="14" type="block" x="752" y="0" width="16" height="320"/>
   <object id="15" type="block" x="0" y="0" width="16" height="320"/>
-  <object id="44" name="shield" type="block" x="360.451" y="201.758" width="13.7311" height="38.2424"/>
+  <object id="44" name="shield" type="block" x="344.239" y="186.94" width="13.7311" height="37.0602"/>
+  <object id="48" type="block" x="304" y="224" width="272" height="16"/>
  </objectgroup>
 </map>

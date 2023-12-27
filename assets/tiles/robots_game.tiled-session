@@ -3,36 +3,36 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "chapter-1/level-1.tmx",
+    "activeFile": "chapter-1/level-3.tmx",
     "expandedProjectPaths": [
+        "chapter1",
         "chapter2",
-        ".",
-        "chapter1"
+        "."
     ],
     "file.lastUsedOpenFilter": "Todos los archivos (*)",
     "fileStates": {
         "chapter-1/level-1.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
             "scale": 0.75,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 289.3333333333333,
-                "y": 254.66666666666669
+                "x": 384,
+                "y": 175.3333333333333
             }
         },
         "chapter-1/level-2.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
             "scale": 1,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 318,
-                "y": 199
+                "x": 320,
+                "y": 200.5
             }
         },
         "chapter-1/level-3.tmx": {
@@ -40,11 +40,11 @@
                 2,
                 3
             ],
-            "scale": 1.5,
+            "scale": 2,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 442.6666666666667,
-                "y": 180
+                "x": 458,
+                "y": 155
             }
         },
         "chapter-2/level-2.tmx": {
@@ -132,13 +132,15 @@
     "map.width": 48,
     "openFiles": [
         "chapter-1/level-1.tmx",
-        "chapter-1/level-2.tmx"
+        "chapter-1/level-2.tmx",
+        "chapter-1/level-3.tmx"
     ],
     "project": "robots_game.tiled-project",
     "property.type": "object",
     "recentFiles": [
-        "chapter-1/level-2.tmx",
         "chapter-1/level-1.tmx",
+        "chapter-1/level-2.tmx",
+        "chapter-1/level-3.tmx",
         "patrones_game.tsx",
         "chapter-2/level-2.tmx",
         "chapter2/level-2.tmx",
@@ -147,8 +149,7 @@
         "chapter1/level-1.tmx",
         "chapter1/Level-1.tmx",
         "chapter1/patrons.tsx",
-        "robots_game.tsx",
-        "patrones.tsx"
+        "robots_game.tsx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

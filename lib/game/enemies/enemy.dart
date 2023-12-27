@@ -9,14 +9,11 @@ import 'package:flutter_flame_game/game/utils/player_effects.dart';
 enum EnemyState {
   idle,
   running,
-  jumping,
-  falling,
   hit,
   appearing,
 }
 
-abstract class Enemy extends SpriteAnimationComponent
-    with HasGameRef<RobotsGame>, CollisionCallbacks {
+abstract class Enemy extends SpriteAnimationComponent with HasGameRef<RobotsGame>, CollisionCallbacks {
   Enemy(this.spawnPoint);
 
   final Vector2 spawnPoint;
@@ -35,10 +32,10 @@ abstract class Enemy extends SpriteAnimationComponent
   int lifePoints = 1;
   late int lifePointsCounter = 0;
   final double stepTime = 0.05;
-  String character = 'Mask Dude';
-  bool isActive = true;
+  String character = 'Mushroom';
   List<Ball> collidedBalls = [];
   double porcentaje = 0;
+  late final RectangleHitbox hitbox;
 
   // set character(String character) {
   //   _character = character;
@@ -51,7 +48,7 @@ abstract class Enemy extends SpriteAnimationComponent
         position: -Vector2(0, 10),
         scale: Vector2.all(0.5));
 
-    _loadAnimations();
+    loadAnimations();
     _spawnRobot();
     spawnEffects(true);
 
@@ -64,19 +61,15 @@ abstract class Enemy extends SpriteAnimationComponent
     return super.onLoad();
   }
 
-  _loadAnimations() {
-    idleAnimation = _spriteAnimation('Idle', 11);
-    runningAnimation = _spriteAnimation('Run', 12);
-    jumpingAnimation = _spriteAnimation('Jump', 1);
-    fallingAnimation = _spriteAnimation('Fall', 1);
-    hitAnimation = _spriteAnimation('Hit', 7)..loop = false;
-    appearingAnimation = _specialSpriteAnimation('Appearing', 7);
+  loadAnimations() {
+    idleAnimation = spriteAnimation('Idle', 13);
+    runningAnimation = spriteAnimation('Run', 12);
+    hitAnimation = spriteAnimation('Hit', 7)..loop = false;
+    appearingAnimation = specialSpriteAnimation('Appearing', 7);
 
     animationsList = {
       EnemyState.idle: idleAnimation,
       EnemyState.running: runningAnimation,
-      EnemyState.jumping: jumpingAnimation,
-      EnemyState.falling: fallingAnimation,
       EnemyState.hit: hitAnimation,
       EnemyState.appearing: appearingAnimation,
     };
@@ -84,9 +77,9 @@ abstract class Enemy extends SpriteAnimationComponent
     animation = animationsList[EnemyState.idle];
   }
 
-  SpriteAnimation _spriteAnimation(String state, int amount) {
+  SpriteAnimation spriteAnimation(String state, int amount) {
     return SpriteAnimation.fromFrameData(
-      game.images.fromCache('Main Characters/$character/$state (32x32).png'),
+      game.images.fromCache('Enemies/$character/$state (32x32).png'),
       SpriteAnimationData.sequenced(
         amount: amount,
         stepTime: stepTime,
@@ -95,7 +88,7 @@ abstract class Enemy extends SpriteAnimationComponent
     );
   }
 
-  SpriteAnimation _specialSpriteAnimation(String state, int amount) {
+  SpriteAnimation specialSpriteAnimation(String state, int amount) {
     return SpriteAnimation.fromFrameData(
       game.images.fromCache('Main Characters/$state (96x96).png'),
       SpriteAnimationData.sequenced(
@@ -109,9 +102,8 @@ abstract class Enemy extends SpriteAnimationComponent
   void _spawnRobot() {
     position = spawnPoint;
 
-    add(
-      RectangleHitbox(collisionType: CollisionType.active),
-    );
+    hitbox = RectangleHitbox(collisionType: CollisionType.active);
+    add(hitbox);
 
     animation = animationsList[EnemyState.idle];
   }
@@ -166,9 +158,8 @@ abstract class Enemy extends SpriteAnimationComponent
   void update(double dt) {
     super.update(dt);
 
-    if (isActive) {
-      collidedBalls
-          .removeWhere((ball) => !this.toRect().overlaps(ball.toRect()));
+    if (hitbox.collisionType == CollisionType.active) {
+      collidedBalls.removeWhere((ball) => !this.toRect().overlaps(ball.toRect()));
 
       lifePointsText.text = '$lifePoints';
       add(lifePointsText);
@@ -184,7 +175,8 @@ abstract class Enemy extends SpriteAnimationComponent
   }
 
   void _die() {
-    isActive = false;
+    
+    hitbox.collisionType = CollisionType.inactive;
 
     gameRef.health.value = gameRef.health.value + 2;
 
