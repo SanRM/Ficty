@@ -116,7 +116,7 @@ abstract class Enemy extends SpriteAnimationComponent with HasGameRef<RobotsGame
       //print(lifePoints);
       animation = animationsList[EnemyState.hit];
 
-      Future.delayed(Duration(milliseconds: 350), () {
+      Future.delayed(const Duration(milliseconds: 350), () {
         animation = animationsList[EnemyState.idle];
       });
     }
@@ -134,22 +134,22 @@ abstract class Enemy extends SpriteAnimationComponent with HasGameRef<RobotsGame
       // Draw the progress bar
       canvas.drawRect(
           Rect.fromLTWH(10, -5, size.x / 1.5 * porcentaje, size.y / 20),
-          Paint()..color = Color(0xFF00FF00));
+          Paint()..color = const Color(0xFF00FF00));
       porcentaje <= 0
           ? 0
           : canvas.drawRect(
               Rect.fromLTWH(10, -5, size.x / 1.5 * 1, size.y / 20),
-              Paint()..color = Color.fromARGB(71, 248, 248, 248),
+              Paint()..color = const Color.fromARGB(71, 248, 248, 248),
             );
     } else {
       canvas.drawRect(
           Rect.fromLTWH(10, -5, size.x / 1.5 * porcentaje, size.y / 20),
-          Paint()..color = Color(0xFF00FF00));
+          Paint()..color = const Color(0xFF00FF00));
       porcentaje <= 0
           ? 0
           : canvas.drawRect(
               Rect.fromLTWH(10, -5, size.x / 1.5 * 1, size.y / 20),
-              Paint()..color = Color.fromARGB(71, 248, 248, 248),
+              Paint()..color = const Color.fromARGB(71, 248, 248, 248),
             );
     }
   }
@@ -159,7 +159,7 @@ abstract class Enemy extends SpriteAnimationComponent with HasGameRef<RobotsGame
     super.update(dt);
 
     if (hitbox.collisionType == CollisionType.active) {
-      collidedBalls.removeWhere((ball) => !this.toRect().overlaps(ball.toRect()));
+      collidedBalls.removeWhere((ball) => !toRect().overlaps(ball.toRect()));
 
       lifePointsText.text = '$lifePoints';
       add(lifePointsText);
@@ -191,9 +191,9 @@ abstract class Enemy extends SpriteAnimationComponent with HasGameRef<RobotsGame
 
     effects.animation = effects.animationsList[PlayerEffectState.desappearing];
 
-    Future.delayed(Duration(milliseconds: 350), () {
+    Future.delayed(const Duration(milliseconds: 350), () {
       effects.animation = effects.animationsList[PlayerEffectState.nullState];
-      this.setOpacity(0);
+      setOpacity(0);
     });
 
     game.enemiesKilled.value++;
@@ -208,12 +208,12 @@ abstract class Enemy extends SpriteAnimationComponent with HasGameRef<RobotsGame
       add(effects);
 
       effects.animation = effects.animationsList[PlayerEffectState.appearing];
-      Future.delayed(Duration(milliseconds: 350), () {
+      Future.delayed(const Duration(milliseconds: 350), () {
         effects.animation = effects.animationsList[PlayerEffectState.nullState];
-        this.setOpacity(1);
+        setOpacity(1);
       });
 
-      this.setOpacity(0);
+      setOpacity(0);
     }
   }
 }

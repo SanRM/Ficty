@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flame_game/game/levels.dart/level.dart';
 import 'package:flutter_flame_game/game/player/ball.dart';
@@ -12,6 +13,7 @@ class RobotsGame extends FlameGame
         HasCollisionDetection,
         DragCallbacks,
         HasGameRef<RobotsGame> {
+
   final String levelName;
   final double responsiveWidth;
   final double responsiveHeight;
@@ -25,9 +27,9 @@ class RobotsGame extends FlameGame
     //debugMode = true;
   }
 
-  Player player = Player(
-    character: 'Ninja Frog',
-  );
+  // Player player = Player(
+  //   character: 'Ninja Frog',
+  // );
 
   final String chapter;
   late CameraComponent cam;
@@ -41,13 +43,16 @@ class RobotsGame extends FlameGame
 
   ValueNotifier<bool> isGameplayActive = ValueNotifier<bool>(false);
   ValueNotifier<Ball> esfera = ValueNotifier<Ball>(Ball(playerX: 0, playerY: 0));
-  
+  ValueNotifier<Player> player = ValueNotifier<Player>(Player(character: 'Ninja Frog',));
+
+  ValueNotifier<AudioPlayer> audioPlayer = ValueNotifier(AudioPlayer());
+  ValueNotifier<bool> playSounds = ValueNotifier<bool>(true);
+  ValueNotifier<double> soundVolume = ValueNotifier<double>(1.0);
 
   @override
   Future<void> onLoad() async {
     await images.loadAllImages();
 
-    //print(health.value);
     _loadLevel();
 
     return super.onLoad();
@@ -56,10 +61,10 @@ class RobotsGame extends FlameGame
   // @override
   // Color backgroundColor() => const Color.fromARGB(255, 144, 229, 255);
 
-  void _loadLevel() {
-    Future.delayed(const Duration(seconds: 1), () {
+  _loadLevel() async {
+    
       Level world = Level(
-        player: player,
+        player: player.value,
         levelName: levelName,
         chapter: chapter,
       );
@@ -73,6 +78,6 @@ class RobotsGame extends FlameGame
       cam.viewfinder.anchor = Anchor.topLeft;
 
       addAll([cam, world]);
-    });
+    
   }
 }

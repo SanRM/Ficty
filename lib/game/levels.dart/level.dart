@@ -1,15 +1,14 @@
 // level.dart
-import 'dart:ui';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flame_game/game/enemies/drone_enemy.dart';
 import 'package:flutter_flame_game/game/enemies/robot_enemy.dart';
-import 'package:flutter_flame_game/game/enemies/shieldBearer_enemy.dart';
+import 'package:flutter_flame_game/game/enemies/shield_bearer_enemy.dart';
 import 'package:flutter_flame_game/game/enemies/teleporter_enemy.dart';
 import 'package:flutter_flame_game/game/utils/collision_block.dart';
 import 'package:flutter_flame_game/game/player/ball.dart';
@@ -31,14 +30,17 @@ class Level extends World
   late TiledComponent levelTiledComponent;
   late Offset _currentPosition;
   //late Ball esfera;
-  late bool dragOnCenter;
+  bool dragIsOnCenter = true;
   Vector2 droneDestino = Vector2.zero();
+  bool pointing = false;
+  //AudioPlayer? audioPlayer;
+  int? activePointerId;
 
   @override
   onLoad() async {
     //print('Loading map...');
 
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 1), () {
       game.isGameplayActive.value = true;
       //print('Gameplay active');
     });
@@ -47,8 +49,6 @@ class Level extends World
         '$levelName.tmx', prefix: 'assets/tiles/$chapter/', Vector2.all(16));
 
     add(levelTiledComponent);
-
-    dragOnCenter = true;
 
     _spawningObjects();
 
@@ -64,9 +64,29 @@ class Level extends World
   }
 
   @override
+  void onDragStart(DragStartEvent event) {
+    pointing = true;
+
+    //ignorar este evento si ya hay un dedo activo
+    if (activePointerId != null) {
+      return;
+    }
+
+    //Guardar el id del dedo activo (pointerId)
+    activePointerId = event.pointerId;
+
+    if (pointing && game.playSounds.value && game.isGameplayActive.value) {
+      playAudio();
+    }
+
+    super.onDragStart(event);
+  }
+
+  @override
   void onDragUpdate(DragUpdateEvent event) {
-    if (game.isGameplayActive.value == true) {
-      dragOnCenter = true;
+    if (game.isGameplayActive.value) {
+      game.esfera.value.hitbox.collisionType = CollisionType.inactive;
+      dragIsOnCenter = true;
       game.esfera.value.resetBall;
 
       _currentPosition = Offset(
@@ -86,8 +106,12 @@ class Level extends World
         newPosition = Offset(
             player.center[0] + (newPosition.dx - player.center[0]) * scale,
             player.center[1] + (newPosition.dy - player.center[1]) * scale);
-      } else {
-        dragOnCenter = false;
+      } else if (game.isGameplayActive.value) {
+        //game.isGameplayActive.value = true;
+        dragIsOnCenter = false;
+        //pointing = false;
+
+        stopAudio();
 
         double scale = radius * distance;
         newPosition = Offset(
@@ -98,6 +122,8 @@ class Level extends World
       _currentPosition = newPosition;
 
       //print(_currentPosition);
+    } else {
+      stopAudio();
     }
 
     super.onDragUpdate(event);
@@ -105,7 +131,30 @@ class Level extends World
 
   @override
   void onDragEnd(DragEndEvent event) {
-    if (game.isGameplayActive.value && dragOnCenter) {
+
+    //ignorar este evento si el dedo activo inicial no es el que se levanta
+    if (event.pointerId != activePointerId) {
+      return;
+    }
+
+    //En caso contrario, limpiar el id del dedo activo
+    activePointerId = null;
+
+    //proceder con el evento
+    if (game.isGameplayActive.value && dragIsOnCenter) {
+      game.isGameplayActive.value = false;
+      stopAudio();
+
+      game.playSounds.value
+          ? FlameAudio.play('Disparo.mp3', volume: game.soundVolume.value)
+          : null;
+
+      pointing = false;
+
+      Future.delayed(const Duration(milliseconds: 100), () {
+        game.esfera.value.hitbox.collisionType = CollisionType.active;
+      });
+
       game.esfera.value.velocity = Vector2(
         _currentPosition.dx - player.center[0],
         _currentPosition.dy - player.center[1],
@@ -123,12 +172,12 @@ class Level extends World
 
   @override
   void render(Canvas canvas) {
-    if (game.isGameplayActive.value == true) {
+    if (game.isGameplayActive.value && pointing) {
       final paint = Paint()
         ..color = Colors.pink
         ..strokeWidth = 2.0;
 
-      Future.delayed(Duration(seconds: 1), () {
+      Future.delayed(const Duration(seconds: 1), () {
         paint.color = Colors.transparent;
       });
 
@@ -196,13 +245,15 @@ class Level extends World
             break;
 
           case 'robot':
-            RobotEnemy robot = RobotEnemy(spawnPoint: Vector2(spawnPoint.x, spawnPoint.y - 11));
+            RobotEnemy robot = RobotEnemy(
+                spawnPoint: Vector2(spawnPoint.x, spawnPoint.y - 11));
             add(robot);
 
             break;
 
           case 'shieldBearer':
-            ShieldBearer shieldBearer = ShieldBearer(spawnPoint: Vector2(spawnPoint.x, spawnPoint.y));
+            ShieldBearer shieldBearer =
+                ShieldBearer(spawnPoint: Vector2(spawnPoint.x, spawnPoint.y));
             add(shieldBearer);
 
             break;
@@ -222,13 +273,14 @@ class Level extends World
             break;
 
           case 'teleporter':
-
             var firstTargetobjectid = spawnPoint.properties.first.value;
-            var firstTarget = spawnPointsLayer.objects.firstWhere((element) => element.id == firstTargetobjectid);
+            var firstTarget = spawnPointsLayer.objects
+                .firstWhere((element) => element.id == firstTargetobjectid);
             var firstVectorTarget = Vector2(firstTarget.x, firstTarget.y);
 
             var secondTargetobjectid = firstTarget.properties.first.value;
-            var secondTarget = spawnPointsLayer.objects.firstWhere((element) => element.id == secondTargetobjectid);
+            var secondTarget = spawnPointsLayer.objects
+                .firstWhere((element) => element.id == secondTargetobjectid);
             var secondVectorTarget = Vector2(secondTarget.x, secondTarget.y);
 
             TeleporterEnemy teleporter = TeleporterEnemy(
@@ -242,10 +294,33 @@ class Level extends World
             break;
         }
 
-        Future.delayed(Duration(microseconds: 2), () {
+        Future.delayed(const Duration(microseconds: 2), () {
           game.health.value = game.enemiesCount.value;
         });
       }
     }
+  }
+
+  Future<void> stopAudio() async {
+    try {
+      await gameRef.audioPlayer.value.pause();
+      print('Audio player: ${gameRef.audioPlayer.value.state}');
+    } catch (e) {
+      print('Error occurred stopping audio player: $e');
+    }
+  }
+
+  Future<void> playAudio() async {
+    try {
+      //await game.audioPlayer.value.play(AssetSource('audio/Apuntando_arma.mp3'), volume: game.soundVolume.value, mode: PlayerMode.lowLatency);
+      gameRef.audioPlayer.value = await FlameAudio.loop('Apuntando_arma.mp3',
+          volume: game.soundVolume.value);
+
+      print('index of audio player: ${gameRef.audioPlayer.value.state.index}');
+
+      if (gameRef.audioPlayer.value.state.index == 3) {}
+
+      print('Audio player: ${gameRef.audioPlayer.value.state}');
+    } catch (e) {}
   }
 }

@@ -101,7 +101,7 @@ class HealthIndicator extends StatelessWidget {
 
                   return Align(
                     alignment: Alignment.topRight,
-                    child: Container(
+                    child: SizedBox(
                       width: MediaQuery.of(context).size.width / 8,
                       child: Column(
                         children: [

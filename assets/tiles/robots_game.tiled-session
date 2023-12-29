@@ -37,14 +37,14 @@
         },
         "chapter-1/level-3.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
-            "scale": 2,
+            "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 458,
-                "y": 155
+                "x": 460.6666666666667,
+                "y": 204.66666666666663
             }
         },
         "chapter-2/level-2.tmx": {

@@ -1,18 +1,22 @@
 import 'package:flame/components.dart';
 import 'package:flutter_flame_game/game/enemies/enemy.dart';
 
+enum TeleporterEnemyState { appearing, desappearing }
+
 class TeleporterEnemy extends Enemy {
   TeleporterEnemy(
-      {required this.spawnPoint,
+      {required spawnPoint,
       required this.firstTarget,
       required this.secondTarget})
       : super(spawnPoint) {
     // Initialize Robot-specific properties here
   }
 
-  final Vector2 spawnPoint;
   final Vector2 firstTarget;
   final Vector2 secondTarget;
+
+  late final SpriteAnimation appearAnimation;
+  late final SpriteAnimation dessaperAnimation;
 
   //10. Not necesary to override but it's here for reference purposes, the default value is true
   @override
@@ -22,8 +26,8 @@ class TeleporterEnemy extends Enemy {
 
   @override
   onLoad() async {
-    print('El primer target es: $firstTarget');
-    print('El segundo target es: $secondTarget');
+    //print('El primer target es: $firstTarget');
+    //print('El segundo target es: $secondTarget');
 
     character = 'Ghost';
     lifePoints = 2;
@@ -37,42 +41,40 @@ class TeleporterEnemy extends Enemy {
   void update(double dt) {
 
     if (position == spawnPoint) {
-      print('El robot está en el primer target');
-
-      Future.delayed(Duration(seconds: 2), () {
+      
+      Future.delayed(const Duration(seconds: 2), () {
         position = firstTarget;
+        
       });
 
     } else if (position == firstTarget) {
-      print('El robot está en el segundo target');
-
-      Future.delayed(Duration(seconds: 2), () {
+      Future.delayed(const Duration(seconds: 2), () {
         position = secondTarget;
       });
 
     } else if (position == secondTarget) {
-      print('El robot está en el spawn point');
-
-      Future.delayed(Duration(seconds: 2), () {
+      Future.delayed(const Duration(seconds: 2), () {
         position = spawnPoint;
       });
 
     }
 
-    
-
     super.update(dt);
   }
+
 
   @override
   loadAnimations() {
     idleAnimation = spriteAnimation('Idle', 10);
     hitAnimation = spriteAnimation('Hit', 5)..loop = false;
-    appearingAnimation = specialSpriteAnimation('Appearing', 7);
+    dessaperAnimation = spriteAnimation('Desappear', 4)..loop = false;
+    appearAnimation = spriteAnimation('Appear', 4)..loop = false;
 
     animationsList = {
       EnemyState.idle: idleAnimation,
       EnemyState.hit: hitAnimation,
+      TeleporterEnemyState.appearing: appearAnimation,
+      TeleporterEnemyState.desappearing: dessaperAnimation,
     };
 
     animation = animationsList[EnemyState.idle];
@@ -90,16 +92,5 @@ class TeleporterEnemy extends Enemy {
     );
   }
 
-  @override
-  SpriteAnimation specialSpriteAnimation(String state, int amount) {
-    return SpriteAnimation.fromFrameData(
-      game.images.fromCache('Main Characters/$state (96x96).png'),
-      SpriteAnimationData.sequenced(
-        amount: amount,
-        stepTime: stepTime,
-        textureSize: Vector2.all(96),
-      ),
-    );
-  }
   //Specific Robot methods here
 }

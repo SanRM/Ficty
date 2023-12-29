@@ -19,7 +19,7 @@ enum PlayerState {
 class Player extends SpriteAnimationComponent with HasGameRef<RobotsGame>, CollisionCallbacks {
   Player({this.character = 'Ninja Frog'}) : super() {
     //debugMode = true;
-    debugColor = Color.fromARGB(255, 0, 255, 136);
+    debugColor = const Color.fromARGB(255, 0, 255, 136);
   }
 
   final String character;
@@ -117,7 +117,7 @@ class Player extends SpriteAnimationComponent with HasGameRef<RobotsGame>, Colli
     if (other is Ball) {
       //print('Ball collided with player');
       animation = animationsList[PlayerState.jumping];
-      Future.delayed(Duration(milliseconds: 350), () {
+      Future.delayed(const Duration(milliseconds: 350), () {
         animation = animationsList[PlayerState.idle];
       });
     }
@@ -138,9 +138,12 @@ class Player extends SpriteAnimationComponent with HasGameRef<RobotsGame>, Colli
       MoveToEffect(
         targetPosition,
         EffectController(duration: 1, curve: Curves.decelerate),
+        onComplete: () {
+          animation = animationsList[PlayerState.idle];
+        },
       ),
     );
-
     animation = animationsList[PlayerState.falling];
+
   }
 }

@@ -38,7 +38,7 @@ class PauseMenu extends StatelessWidget {
                   fontSize: responsiveHeight / 10,
                 ),
               ),
-              Container(
+              SizedBox(
                 width: responsiveWidth / 3,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,

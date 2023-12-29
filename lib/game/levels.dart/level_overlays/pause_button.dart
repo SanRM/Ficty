@@ -14,6 +14,7 @@ class PauseButton extends StatelessWidget {
     return Align(
       alignment: Alignment.topCenter,
       child: Padding(
+        // ignore: prefer_const_constructors
         padding: EdgeInsets.all(10),
         child: TextButton(
           onPressed: () {

@@ -2,11 +2,9 @@ import 'package:flame/components.dart';
 import 'package:flutter_flame_game/game/enemies/enemy.dart';
 
 class RobotEnemy extends Enemy {
-  RobotEnemy({required this.spawnPoint}) : super(spawnPoint) {
+  RobotEnemy({required spawnPoint}) : super(spawnPoint) {
     // Initialize Robot-specific properties here
   }
-
-  final Vector2 spawnPoint;
   
   //10. Not necesary to override but it's here for reference purposes, the default value is true
   @override

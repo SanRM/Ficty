@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_flame_game/game/levels.dart/level_overlays/pause_button.dart';
 import 'package:flutter_flame_game/game/levels.dart/level_overlays/player_health.dart';
 import 'package:flutter_flame_game/game/robots_game.dart';
 
@@ -45,6 +46,8 @@ class HistoryPanel extends StatelessWidget {
                   child: FilledButton(
                     onPressed: () {
                       gameRef.overlays.remove(HistoryPanel.id);
+                      gameRef.overlays.add(PauseButton.id);
+                      gameRef.overlays.add(HealthIndicator.id);
                       gameRef.resumeEngine();
                       //gameRef.overlays.add(HealthIndicator.id);
                     },

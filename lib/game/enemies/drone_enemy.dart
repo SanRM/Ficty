@@ -4,12 +4,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_flame_game/game/enemies/enemy.dart';
 
 class DroneEnemy extends Enemy {
-  DroneEnemy({required this.spawnPoint, required this.target})
+  DroneEnemy({required spawnPoint, required this.target})
       : super(spawnPoint) {
     // Initialize Robot-specific properties here
   }
 
-  final Vector2 spawnPoint;
   final Vector2 target;
 
   //10. Not necesary to override but it's here for reference purposes, the default value is true

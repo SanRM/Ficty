@@ -1,8 +1,9 @@
 import 'dart:math';
-import 'dart:ui';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flame_game/game/enemies/teleporter_enemy.dart';
 import 'package:flutter_flame_game/game/utils/ball_effects.dart';
@@ -28,18 +29,20 @@ class Ball extends CircleComponent
   }
 
   Vector2 velocity = Vector2.zero();
-  double speed = 7;
+  double speed = 10;
   BallEffects ballEffects = BallEffects();
   int collisionCount = 0;
-  Random random = new Random();
+  Random random = Random();
+  late final CircleHitbox hitbox;
 
   // 6.
   @override
   onLoad() {
     resetBall;
-    final hitBox = CircleHitbox(isSolid: true, collisionType: CollisionType.active);
+    hitbox = CircleHitbox(isSolid: true, collisionType: CollisionType.inactive);
 
-    addAll([hitBox, ballEffects]);
+    addAll([hitbox, ballEffects]);
+    AudioCache().load('audio/Rebote_paredes.mp3');
 
     return super.onLoad();
   }
@@ -52,7 +55,9 @@ class Ball extends CircleComponent
     //print(collisionCount);
     if (collisionCount > 5) {
       resetBall;
+      game.isGameplayActive.value = true;
     }
+    //print(game.isGameplayActive.value);
   }
 
   // 4.
@@ -66,6 +71,10 @@ class Ball extends CircleComponent
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     
     if (other is CollisionBlock || other is TeleporterEnemy) {
+
+      //game.audioPlayer.value.play(AssetSource('audio/Rebote_paredes.mp3'), volume: game.soundVolume.value, mode: PlayerMode.lowLatency);
+      FlameAudio.play('Rebote_paredes.mp3', volume: gameRef.soundVolume.value);
+
       // Determine the side of the collision
       double otherBottom = other.position.y + other.size.y;
       double otherRight = other.position.x + other.size.x;
